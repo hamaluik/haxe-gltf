@@ -1,0 +1,11 @@
+{
+  "name": "gltf",
+  "url" : "https://github.com/FuzzyWuzzie/haxe-gltf",
+  "license": "MIT",
+  "tags": ["cross", "utility"],
+  "description": "A Haxe library for reading (and eventually, writing GLTF files.",
+  "version": "1.0.0-alpha",
+  "releasenote": "Working on implementation.",
+  "contributors": ["FuzzyWuzzie"],
+  "dependencies": {}
+}
