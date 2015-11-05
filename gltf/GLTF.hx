@@ -9,6 +9,7 @@ class GLTF {
 	var bufferViews:StringMap<BufferView>;
 	var buffers:StringMap<Buffer>;
 	var materials:StringMap<Material>;
+	var meshes:StringMap<Mesh>;
 
 	private function new(){}
 
@@ -73,6 +74,38 @@ class GLTF {
 				material.values.set(valueID, valueData);
 			}
 			gltf.materials.set(materialID, material);
+		}
+
+		// load meshes
+		if(!Reflect.hasField(data, "meshes")) {
+			throw "Missing field: meshes";
+		}
+		gltf.meshes = new StringMap<Mesh>();
+		for(meshID in Reflect.fields(data.meshes)) {
+			var meshData:Dynamic = Reflect.field(data.meshes, meshID);
+			var mesh:Mesh = {
+				extensions: meshData.extensions,
+				extras: meshData.extensions,
+				name: meshData.name,
+				primitives: new Array<Mesh.MeshPrimitive>()
+			}
+			var primitives:Array<Dynamic> = meshData.primitives;
+			for(primitiveData in primitives) {
+				var primitive:Mesh.MeshPrimitive = {
+					extensions: primitiveData.extensions,
+					extras: primitiveData.extras,
+					attributes: new StringMap<Mesh.MeshPrimitiveAttribute>(),
+					indices: primitiveData.indices,
+					material: primitiveData.material,
+					mode: primitiveData.mode
+				};
+				for(attributeID in Reflect.fields(primitiveData.attributes)) {
+					var attribute:Mesh.MeshPrimitiveAttribute = Reflect.field(primitiveData.attributes, attributeID);
+					primitive.attributes.set(attributeID, attribute);
+				}
+				mesh.primitives.push(primitive);
+			}
+			gltf.meshes.set(meshID, mesh);
 		}
 
 		return gltf;
