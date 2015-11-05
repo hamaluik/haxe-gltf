@@ -12,6 +12,9 @@ class GLTF {
 	var meshes:StringMap<Mesh>;
 	var nodes:StringMap<Node>;
 	var programs:StringMap<Program>;
+	var scene:GLTFID;
+	var scenes:StringMap<Scene>;
+	var shaders:StringMap<Shader>;
 
 	private function new(){}
 
@@ -128,6 +131,32 @@ class GLTF {
 		for(programID in Reflect.fields(data.programs)) {
 			var program:Program = Reflect.field(data.programs, programID);
 			gltf.programs.set(programID, program);
+		}
+
+		// load the main scene
+		if(!Reflect.hasField(data, "scene")) {
+			throw "Missing field: scene";
+		}
+		gltf.scene = data.scene;
+
+		// load scenes
+		if(!Reflect.hasField(data, "scenes")) {
+			throw "Missing field: scenes";
+		}
+		gltf.scenes = new StringMap<Scene>();
+		for(sceneID in Reflect.fields(data.scenes)) {
+			var scene:Scene = Reflect.field(data.scenes, sceneID);
+			gltf.scenes.set(sceneID, scene);
+		}
+
+		// load shaders
+		if(!Reflect.hasField(data, "shaders")) {
+			throw "Missing field: shaders";
+		}
+		gltf.shaders = new StringMap<Shader>();
+		for(shaderID in Reflect.fields(data.shaders)) {
+			var shader:Shader = Reflect.field(data.shaders, shaderID);
+			gltf.shaders.set(shaderID, shader);
 		}
 
 		return gltf;

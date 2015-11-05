@@ -1,7 +1,5 @@
 package gltf;
 
-import haxe.ds.StringMap;
-
 typedef Node = {
 	>ChildOfRootProperty,
 
