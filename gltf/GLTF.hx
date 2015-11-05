@@ -7,6 +7,7 @@ class GLTF {
 	var animations:StringMap<Animation>;
 	var asset:Asset;
 	var bufferViews:StringMap<BufferView>;
+	var buffers:StringMap<Buffer>;
 
 	private function new(){}
 
@@ -40,6 +41,18 @@ class GLTF {
 			var bufferView:BufferView = Reflect.field(data.bufferViews, bufferViewID);
 			gltf.bufferViews.set(bufferViewID, bufferView);
 		}
+
+		// load buffers
+		if(!Reflect.hasField(data, "buffers")) {
+			throw "Missing field: buffers";
+		}
+		gltf.buffers = new StringMap<Buffer>();
+		for(bufferID in Reflect.fields(data.buffers)) {
+			var buffer:Buffer = Reflect.field(data.buffers, bufferID);
+			gltf.buffers.set(bufferID, buffer);
+		}
+
+		
 
 		return gltf;
 	}
