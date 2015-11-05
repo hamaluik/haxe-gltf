@@ -16,6 +16,7 @@ class GLTF {
 	var scenes:StringMap<Scene>;
 	var shaders:StringMap<Shader>;
 	var skins:StringMap<Skin>;
+	var techniques:StringMap<Technique>;
 
 	private function new(){}
 
@@ -168,6 +169,36 @@ class GLTF {
 		for(skinID in Reflect.fields(data.skins)) {
 			var skin:Skin = Reflect.field(data.skins, skinID);
 			gltf.skins.set(skinID, skin);
+		}
+
+		// load techniques
+		if(!Reflect.hasField(data, "techniques")) {
+			throw "Missing field: techniques";
+		}
+		gltf.techniques = new StringMap<Technique>();
+		for(techniqueID in Reflect.fields(data.techniques)) {
+			var techniqueData:Dynamic = Reflect.field(data.techniques, techniqueID);
+			var technique:Technique = {
+				extensions: techniqueData.extensions,
+				extras: techniqueData.extensions,
+				name: techniqueData.name,
+				parameters: new StringMap<Technique.TechniqueParameters>(),
+				attributes: new StringMap<GLTFID>(),
+				program: techniqueData.program,
+				uniforms: new StringMap<GLTFID>(),
+				states: techniqueData.states
+			}
+			for(parameterID in Reflect.fields(techniqueData.parameters)) {
+				var parameterData:Technique.TechniqueParameters = Reflect.field(techniqueData.parameters, parameterID);
+				technique.parameters.set(parameterID, parameterData);
+			}
+			for(attributeID in Reflect.fields(techniqueData.attributes)) {
+				technique.attributes.set(attributeID, Reflect.field(techniqueData.attributes, attributeID));
+			}
+			for(uniformID in Reflect.fields(techniqueData.uniforms)) {
+				technique.uniforms.set(uniformID, Reflect.field(techniqueData.uniforms, uniformID));
+			}
+			gltf.techniques.set(techniqueID, technique);
 		}
 
 		return gltf;
