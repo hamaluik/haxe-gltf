@@ -8,6 +8,7 @@ class GLTF {
 	var asset:Asset;
 	var bufferViews:StringMap<BufferView>;
 	var buffers:StringMap<Buffer>;
+	var materials:StringMap<Material>;
 
 	private function new(){}
 
@@ -52,7 +53,27 @@ class GLTF {
 			gltf.buffers.set(bufferID, buffer);
 		}
 
-		
+		// load materials
+		if(!Reflect.hasField(data, "materials")) {
+			throw "Missing field: materials";
+		}
+		gltf.materials = new StringMap<Material>();
+		for(materialID in Reflect.fields(data.materials)) {
+			//var material:Material = Reflect.field(data.materials, materialID);
+			var materialData:Dynamic = Reflect.field(data.materials, materialID);
+			var material:Material = {
+				extensions: materialData.extensions,
+				extras: materialData.extras,
+				name: materialData.name,
+				technique: materialData.technique,
+				values: new StringMap<Dynamic>()
+			};
+			for(valueID in Reflect.fields(materialData.values)) {
+				var valueData:Dynamic = Reflect.field(materialData.values, valueID);
+				material.values.set(valueID, valueData);
+			}
+			gltf.materials.set(materialID, material);
+		}
 
 		return gltf;
 	}
