@@ -4,7 +4,7 @@ import haxe.ds.StringMap;
 
 class GLTF {
 	var accessors:StringMap<Accessor>;
-	// var animations
+	var animations:StringMap<Animation>;
 	var asset:Asset;
 	var bufferViews:StringMap<BufferView>;
 
@@ -23,7 +23,7 @@ class GLTF {
 			gltf.accessors.set(accessorID, accessor);
 		}
 
-		// load animations
+		// TODO: load animations
 
 		// load asset
 		if(!Reflect.hasField(data, "asset")) {
