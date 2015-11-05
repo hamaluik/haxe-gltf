@@ -15,6 +15,7 @@ class GLTF {
 	var scene:GLTFID;
 	var scenes:StringMap<Scene>;
 	var shaders:StringMap<Shader>;
+	var skins:StringMap<Skin>;
 
 	private function new(){}
 
@@ -157,6 +158,16 @@ class GLTF {
 		for(shaderID in Reflect.fields(data.shaders)) {
 			var shader:Shader = Reflect.field(data.shaders, shaderID);
 			gltf.shaders.set(shaderID, shader);
+		}
+
+		// load skins
+		if(!Reflect.hasField(data, "skins")) {
+			throw "Missing field: skins";
+		}
+		gltf.skins = new StringMap<Skin>();
+		for(skinID in Reflect.fields(data.skins)) {
+			var skin:Skin = Reflect.field(data.skins, skinID);
+			gltf.skins.set(skinID, skin);
 		}
 
 		return gltf;
