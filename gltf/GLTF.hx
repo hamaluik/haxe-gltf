@@ -11,6 +11,7 @@ class GLTF {
 	var materials:StringMap<Material>;
 	var meshes:StringMap<Mesh>;
 	var nodes:StringMap<Node>;
+	var programs:StringMap<Program>;
 
 	private function new(){}
 
@@ -117,6 +118,16 @@ class GLTF {
 		for(nodeID in Reflect.fields(data.nodes)) {
 			var node:Node = Reflect.field(data.nodes, nodeID);
 			gltf.nodes.set(nodeID, node);
+		}
+
+		// load programs
+		if(!Reflect.hasField(data, "programs")) {
+			throw "Missing field: programs";
+		}
+		gltf.programs = new StringMap<Program>();
+		for(programID in Reflect.fields(data.programs)) {
+			var program:Program = Reflect.field(data.programs, programID);
+			gltf.programs.set(programID, program);
 		}
 
 		return gltf;
