@@ -10,6 +10,7 @@ class GLTF {
 	var buffers:StringMap<Buffer>;
 	var materials:StringMap<Material>;
 	var meshes:StringMap<Mesh>;
+	var nodes:StringMap<Node>;
 
 	private function new(){}
 
@@ -106,6 +107,16 @@ class GLTF {
 				mesh.primitives.push(primitive);
 			}
 			gltf.meshes.set(meshID, mesh);
+		}
+
+		// load nodes
+		if(!Reflect.hasField(data, "nodes")) {
+			throw "Missing field: nodes";
+		}
+		gltf.nodes = new StringMap<Node>();
+		for(nodeID in Reflect.fields(data.nodes)) {
+			var node:Node = Reflect.field(data.nodes, nodeID);
+			gltf.nodes.set(nodeID, node);
 		}
 
 		return gltf;
