@@ -1,0 +1,7 @@
+-lib buddy
+-cp test
+-cp .
+-main TestMain
+
+# embed resources for testing
+-resource sampleModels/box/glTF/Box.gltf@box
