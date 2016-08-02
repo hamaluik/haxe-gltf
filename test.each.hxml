@@ -4,4 +4,4 @@
 -main TestMain
 
 # embed resources for testing
--resource sampleModels/box/glTF/Box.gltf@box
+-resource sampleModels/Box/glTF/Box.gltf@box
