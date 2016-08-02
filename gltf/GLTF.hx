@@ -3,24 +3,24 @@ package gltf;
 import haxe.ds.StringMap;
 
 class GLTF {
-	var accessors:StringMap<Accessor>;
-	var animations:StringMap<Animation>;
-	var asset:Asset;
-	var bufferViews:StringMap<BufferView>;
-	var buffers:StringMap<Buffer>;
-	var cameras:StringMap<Camera>;
-	//var images:StringMap<Image>;
-	var materials:StringMap<Material>;
-	var meshes:StringMap<Mesh>;
-	var nodes:StringMap<Node>;
-	var programs:StringMap<Program>;
-	//var samplers:StringMap<Sampler>;
-	var scene:GLTFID;
-	var scenes:StringMap<Scene>;
-	var shaders:StringMap<Shader>;
-	var skins:StringMap<Skin>;
-	var techniques:StringMap<Technique>;
-	//var textures:StringMap<Texture>;
+	public var accessors:StringMap<Accessor>;
+	public var animations:StringMap<Animation>;
+	public var asset:Asset;
+	public var bufferViews:StringMap<BufferView>;
+	public var buffers:StringMap<Buffer>;
+	public var cameras:StringMap<Camera>;
+	//public var images:StringMap<Image>;
+	public var materials:StringMap<Material>;
+	public var meshes:StringMap<Mesh>;
+	public var nodes:StringMap<Node>;
+	public var programs:StringMap<Program>;
+	//public var samplers:StringMap<Sampler>;
+	public var scene:GLTFID;
+	public var scenes:StringMap<Scene>;
+	public var shaders:StringMap<Shader>;
+	public var skins:StringMap<Skin>;
+	public var techniques:StringMap<Technique>;
+	//public var textures:StringMap<Texture>;
 
 	private function new(){}
 

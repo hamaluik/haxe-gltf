@@ -3,5 +3,8 @@
 -cp .
 -main TestMain
 
+# fancy colourized output
+-D buddy-colors
+
 # embed resources for testing
 -resource sampleModels/Box/glTF/Box.gltf@box
