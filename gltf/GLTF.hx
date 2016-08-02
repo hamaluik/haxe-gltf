@@ -8,15 +8,19 @@ class GLTF {
 	var asset:Asset;
 	var bufferViews:StringMap<BufferView>;
 	var buffers:StringMap<Buffer>;
+	var cameras:StringMap<Camera>;
+	//var images:StringMap<Image>;
 	var materials:StringMap<Material>;
 	var meshes:StringMap<Mesh>;
 	var nodes:StringMap<Node>;
 	var programs:StringMap<Program>;
+	//var samplers:StringMap<Sampler>;
 	var scene:GLTFID;
 	var scenes:StringMap<Scene>;
 	var shaders:StringMap<Shader>;
 	var skins:StringMap<Skin>;
 	var techniques:StringMap<Technique>;
+	//var textures:StringMap<Texture>;
 
 	private function new(){}
 
@@ -59,6 +63,16 @@ class GLTF {
 		for(bufferID in Reflect.fields(data.buffers)) {
 			var buffer:Buffer = Reflect.field(data.buffers, bufferID);
 			gltf.buffers.set(bufferID, buffer);
+		}
+
+		// load cameras
+		if(!Reflect.hasField(data, "cameras")) {
+			throw "Missing field: cameras";
+		}
+		gltf.cameras = new StringMap<Camera>();
+		for(cameraID in Reflect.fields(data.cameras)) {
+			var camera:Camera = Reflect.field(data.cameras, cameraID);
+			gltf.cameras.set(cameraID, camera);
 		}
 
 		// load materials
