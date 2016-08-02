@@ -1,10 +1,6 @@
 package gltf;
 
-@:enum
-abstract BufferType(String) {
-	var ArrayBuffer = "ArrayBuffer";
-	var Text = "Text";
-}
+import gltf.type.BufferType;
 
 typedef Buffer = {
 	>ChildOfRootProperty,

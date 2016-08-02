@@ -1,6 +1,6 @@
 package gltf;
 
-import gltf.type.BufferType;
+import gltf.type.BufferViewType;
 
 typedef BufferView = {
 	>ChildOfRootProperty,
@@ -8,5 +8,5 @@ typedef BufferView = {
 	var buffer:String;
 	var byteOffset:Int;
 	var byteLength:Int;
-	@:optional var target:BufferType;
+	@:optional var target:BufferViewType;
 }

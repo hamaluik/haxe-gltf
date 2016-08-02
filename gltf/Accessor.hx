@@ -12,6 +12,6 @@ typedef Accessor = {
 	var componentType:DataType;
 	var count:Int;
 	var type:AccessorType;
-	@:optional var max:Array<Int>;
-	@:optional var min:Array<Int>;
+	@:optional var max:Array<Float>;
+	@:optional var min:Array<Float>;
 }

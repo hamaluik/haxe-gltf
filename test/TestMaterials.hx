@@ -22,6 +22,11 @@ class TestMaterials extends BuddySuite {
 			it("shouldn't populate un-listed values", {
 				box.materials.get("Effect-Red").values.get("redness").should.be(null);
 			});
+			it("should load the material's technique", {
+				var techID:String = box.materials.get("Effect-Red").technique;
+				techID.should.be("technique0");
+				box.techniques.get(techID).should.not.be(null);
+			});
 		});
 	}
 }
