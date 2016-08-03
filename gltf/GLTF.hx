@@ -14,7 +14,7 @@ class GLTF {
 	public var meshes:StringMap<Mesh>;
 	public var nodes:StringMap<Node>;
 	public var programs:StringMap<Program>;
-	//public var samplers:StringMap<Sampler>;
+	public var samplers:StringMap<Sampler>;
 	public var scene:GLTFID;
 	public var scenes:StringMap<Scene>;
 	public var shaders:StringMap<Shader>;
@@ -148,6 +148,15 @@ class GLTF {
 			for(programID in Reflect.fields(data.programs)) {
 				var program:Program = Reflect.field(data.programs, programID);
 				gltf.programs.set(programID, program);
+			}
+		}
+
+		// load samplers
+		if(Reflect.hasField(data, "samplers")) {
+			gltf.samplers = new StringMap<Sampler>();
+			for(samplerID in Reflect.fields(data.samplers)) {
+				var sampler:Sampler = Reflect.field(data.samplers, samplerID);
+				gltf.samplers.set(samplerID, sampler);
 			}
 		}
 
