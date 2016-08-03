@@ -9,7 +9,7 @@ class GLTF {
 	public var bufferViews:StringMap<BufferView>;
 	public var buffers:StringMap<Buffer>;
 	public var cameras:StringMap<Camera>;
-	//public var images:StringMap<Image>;
+	public var images:StringMap<Image>;
 	public var materials:StringMap<Material>;
 	public var meshes:StringMap<Mesh>;
 	public var nodes:StringMap<Node>;
@@ -69,6 +69,15 @@ class GLTF {
 			for(cameraID in Reflect.fields(data.cameras)) {
 				var camera:Camera = Reflect.field(data.cameras, cameraID);
 				gltf.cameras.set(cameraID, camera);
+			}
+		}
+
+		// load images
+		if(Reflect.hasField(data, "images")) {
+			gltf.images = new StringMap<Image>();
+			for(imageID in Reflect.fields(data.images)) {
+				var image:Image = Reflect.field(data.images, imageID);
+				gltf.images.set(imageID, image);
 			}
 		}
 
