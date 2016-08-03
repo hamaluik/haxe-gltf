@@ -7,6 +7,7 @@ class TestMain {
 		var sources:StringMap<String> = new StringMap<String>();
 		sources.set("box", haxe.Resource.getString("box"));
 		sources.set("duck", haxe.Resource.getString("duck"));
+		sources.set("rigged", haxe.Resource.getString("rigged"));
 
 		// use coloured console
 		var reporter = new ConsoleColorReporter();

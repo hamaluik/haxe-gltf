@@ -9,3 +9,4 @@
 # embed resources for testing
 -resource sampleModels/Box/glTF/Box.gltf@box
 -resource sampleModels/Duck/glTF/Duck.gltf@duck
+-resource sampleModels/RiggedSimple/glTF/RiggedSimple.gltf@rigged
