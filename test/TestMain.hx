@@ -6,6 +6,7 @@ class TestMain {
 		// load all our resource files
 		var sources:StringMap<String> = new StringMap<String>();
 		sources.set("box", haxe.Resource.getString("box"));
+		sources.set("duck", haxe.Resource.getString("duck"));
 
 		// use coloured console
 		var reporter = new ConsoleColorReporter();

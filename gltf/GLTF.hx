@@ -25,6 +25,8 @@ class GLTF {
 	private function new(){}
 
 	public static function load(data:Dynamic):GLTF {
+		if(data == null) throw "Provided GLTF data is null!";
+
 		var gltf:GLTF = new GLTF();
 
 		// load acessors
@@ -205,6 +207,8 @@ class GLTF {
 	}
 
 	public static function parse(gltf:String):GLTF {
+		if(gltf == null) throw "Provided GLTF string is null!";
+		if(StringTools.trim(gltf).length < 2) throw "Provided GLTF string is empty!";
 		return GLTF.load(haxe.Json.parse(gltf));
 	}
 }
