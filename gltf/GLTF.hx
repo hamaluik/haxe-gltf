@@ -20,7 +20,7 @@ class GLTF {
 	public var shaders:StringMap<Shader>;
 	public var skins:StringMap<Skin>;
 	public var techniques:StringMap<Technique>;
-	//public var textures:StringMap<Texture>;
+	public var textures:StringMap<Texture>;
 
 	private function new(){}
 
@@ -218,6 +218,15 @@ class GLTF {
 					technique.uniforms.set(uniformID, Reflect.field(techniqueData.uniforms, uniformID));
 				}
 				gltf.techniques.set(techniqueID, technique);
+			}
+		}
+
+		// load textures
+		if(Reflect.hasField(data, "textures")) {
+			gltf.textures = new StringMap<Texture>();
+			for(textureID in Reflect.fields(data.textures)) {
+				var texture:Texture = Reflect.field(data.textures, textureID);
+				gltf.textures.set(textureID, texture);
 			}
 		}
 
