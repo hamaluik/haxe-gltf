@@ -1,3 +1,4 @@
 test.each.hxml
+-dce no
 -python bin/TestMain.py
 -cmd python3 bin/TestMain.py
