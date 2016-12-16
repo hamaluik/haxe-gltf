@@ -8,4 +8,5 @@
 
 # embed resources for testing
 -resource sampleModels/Box/glTF/Box.gltf@box
--resource sampleModels/Box/glTF-Embedded/Box.gltf@box_embedded
+-resource sampleModels/Duck/glTF/Duck.gltf@duck
+-resource sampleModels/RiggedSimple/glTF/RiggedSimple.gltf@rigged

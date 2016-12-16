@@ -9,22 +9,24 @@ class GLTF {
 	public var bufferViews:StringMap<BufferView>;
 	public var buffers:StringMap<Buffer>;
 	public var cameras:StringMap<Camera>;
-	//public var images:StringMap<Image>;
+	public var images:StringMap<Image>;
 	public var materials:StringMap<Material>;
 	public var meshes:StringMap<Mesh>;
 	public var nodes:StringMap<Node>;
 	public var programs:StringMap<Program>;
-	//public var samplers:StringMap<Sampler>;
+	public var samplers:StringMap<Sampler>;
 	public var scene:GLTFID;
 	public var scenes:StringMap<Scene>;
 	public var shaders:StringMap<Shader>;
 	public var skins:StringMap<Skin>;
 	public var techniques:StringMap<Technique>;
-	//public var textures:StringMap<Texture>;
+	public var textures:StringMap<Texture>;
 
 	private function new(){}
 
 	public static function load(data:Dynamic):GLTF {
+		if(data == null) throw "Provided GLTF data is null!";
+
 		var gltf:GLTF = new GLTF();
 
 		// load acessors
@@ -67,6 +69,15 @@ class GLTF {
 			for(cameraID in Reflect.fields(data.cameras)) {
 				var camera:Camera = Reflect.field(data.cameras, cameraID);
 				gltf.cameras.set(cameraID, camera);
+			}
+		}
+
+		// load images
+		if(Reflect.hasField(data, "images")) {
+			gltf.images = new StringMap<Image>();
+			for(imageID in Reflect.fields(data.images)) {
+				var image:Image = Reflect.field(data.images, imageID);
+				gltf.images.set(imageID, image);
 			}
 		}
 
@@ -140,6 +151,15 @@ class GLTF {
 			}
 		}
 
+		// load samplers
+		if(Reflect.hasField(data, "samplers")) {
+			gltf.samplers = new StringMap<Sampler>();
+			for(samplerID in Reflect.fields(data.samplers)) {
+				var sampler:Sampler = Reflect.field(data.samplers, samplerID);
+				gltf.samplers.set(samplerID, sampler);
+			}
+		}
+
 		// load the main scene
 		if(Reflect.hasField(data, "scene")) {
 			gltf.scene = data.scene;
@@ -201,10 +221,21 @@ class GLTF {
 			}
 		}
 
+		// load textures
+		if(Reflect.hasField(data, "textures")) {
+			gltf.textures = new StringMap<Texture>();
+			for(textureID in Reflect.fields(data.textures)) {
+				var texture:Texture = Reflect.field(data.textures, textureID);
+				gltf.textures.set(textureID, texture);
+			}
+		}
+
 		return gltf;
 	}
 
 	public static function parse(gltf:String):GLTF {
+		if(gltf == null) throw "Provided GLTF string is null!";
+		if(StringTools.trim(gltf).length < 2) throw "Provided GLTF string is empty!";
 		return GLTF.load(haxe.Json.parse(gltf));
 	}
 }
