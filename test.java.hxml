@@ -1,3 +1,0 @@
-test.each.hxml
--java bin
--cmd java -jar bin/TestMain.jar
