@@ -1,6 +1,11 @@
 package gltf;
 
+import haxe.io.Bytes;
 import gltf.Schema;
+import tink.core.Promise;
+import tink.core.Future;
+
+using StringTools;
 
 /**
  *  An object representing a glTF scene
@@ -16,11 +21,29 @@ class GLTF {
     }
 
     /**
+     *  Parses and loads a glTF file in one step
+     *  @param uri - The uri of the glTF file to load
+     *  @param assetFetcher - a function which takes in a URI and returns a promise with the contents
+     *  @return Promise<GLTF>
+     */
+    public static function parseAndLoad(uri:String, assetFetcher:String->Promise<Bytes>):Promise<GLTF> {
+        return assetFetcher(uri)
+        .next(function(data:Bytes):Promise<GLTF> {
+            return GLTF.parse(data.toString());
+        })
+        .next(function(glTF:GLTF) {
+            return glTF.load(assetFetcher);
+        });
+    }
+
+    /**
      *  Parse a glTF string into the `raw` field of the GLTF
      *  @param src - The glTF source
      *  @return GLTF
      */
-    public static function parse(src:String):GLTF {
+    public static function parse(src:String):Future<GLTF> {
+        var f:FutureTrigger<GLTF> = new FutureTrigger<GLTF>();
+
         var gltf:GLTF = new GLTF();
         gltf.raw = cast(haxe.Json.parse(src));
 
@@ -64,16 +87,29 @@ class GLTF {
             if(texture.sampler == null) texture.sampler = -1; // TODO: better index to default sampler?
         }
 
-        return gltf;
+        f.trigger(gltf);
+        return f;
     }
 
     /**
-     *  Loads the full GLTF data declared in this object's `raw` field
-     *  @return GLTF
+     *  Loads the raw glTF data into a more usable object
+     *  @param assetFetcher - a function which takes in a URI and returns a promise with the contents
+     *  @return Surprise<GLTF, Dynamic>
      */
-    public function load():GLTF {
+    public function load(assetFetcher:String->Promise<Bytes>):Promise<GLTF> {
+        var _buffers:Array<Bytes> = new Array<Bytes>();
 
+        return Promise.inParallel([for(buffer in raw.buffers) assetFetcher(buffer.uri)])
+        .next(function(buffers:Array<Bytes>) {
+            _buffers = buffers;
 
-        return this;
+            for(buffer in buffers) {
+                trace('Loaded ${buffer.length} bytes into buffer!');
+            }
+
+            var f:FutureTrigger<GLTF> = Future.trigger();
+            f.trigger(this);
+            return f.asFuture();
+        });
     }
 }

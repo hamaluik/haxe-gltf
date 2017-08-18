@@ -1,12 +1,40 @@
 package;
 
+import haxe.io.Bytes;
+import tink.CoreApi;
 import gltf.GLTF;
 
-class Main {
-    public static function main() {
-        var src:String = sys.io.File.getContent("sample-models/box/Box.gltf");
+using tink.core.Outcome;
 
-        var model:GLTF = GLTF.parse(src).load();
-        trace(model.raw);
+class Main {
+    private static function fetchAsset(uri:String):Promise<Bytes> {
+        var p:Promise<Bytes> = null;
+        uri = "sample-models/box/" + uri;
+        if(!sys.FileSystem.exists(uri)) {
+            p = new Error(tink.core.Error.ErrorCode.NotFound, "File not found: " + uri);
+        }
+        else {
+            var ft:FutureTrigger<Bytes> = Future.trigger();
+            ft.trigger(sys.io.File.getBytes(uri));
+            p = ft.asFuture();
+        }
+
+        return  p;
+    }
+
+    public static function main() {
+        GLTF.parseAndLoad('Box.gltf', fetchAsset)
+        .handle(function(result:Outcome<GLTF, Error>) {
+            switch(result) {
+                case Success(gltf): {
+                    trace('glTF loaded!');
+                }
+
+                case Failure(error): {
+                    trace('Error loading glTF:');
+                    trace(error.toString());
+                }
+            }
+        });
     }
 }

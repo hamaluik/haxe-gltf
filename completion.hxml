@@ -1,5 +1,7 @@
 -cp src
 
+-lib tink_core
+
 -main Main
 
 --interp
