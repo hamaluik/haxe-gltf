@@ -26,8 +26,9 @@ class Main {
         GLTF.parseAndLoad('Box.gltf', fetchAsset)
         .handle(function(result:Outcome<GLTF, Error>) {
             switch(result) {
-                case Success(gltf): {
+                case Success(glTF): {
                     trace('glTF loaded!');
+                    trace(glTF);
                 }
 
                 case Failure(error): {

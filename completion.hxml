@@ -1,6 +1,7 @@
 -cp src
 
 -lib tink_core
+-lib glm
 
 -main Main
 

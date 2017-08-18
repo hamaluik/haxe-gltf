@@ -4,8 +4,16 @@ import haxe.io.Bytes;
 import gltf.Schema;
 import tink.core.Promise;
 import tink.core.Future;
+import glm.Mat4;
 
-using StringTools;
+// TODO: node types?
+typedef Node = {
+    @:optional var transform:Mat4;
+}
+
+typedef Scene = {
+    var nodes:Array<Node>;
+}
 
 /**
  *  An object representing a glTF scene
@@ -15,6 +23,10 @@ class GLTF {
      *  The raw glTF data structures; you probably don't care about these if you've called `load()`
      */
     public var raw:TGLTF = null;
+
+    // TODO: object layout?
+    public var scenes:Array<Scene> = new Array<Scene>();
+    public var defaultScene:Scene = null;
 
     public function new(?raw:TGLTF) {
         this.raw = raw;
@@ -70,6 +82,52 @@ class GLTF {
 
         if(gltf.raw.images == null) gltf.raw.images = new Array<TImage>();
 
+        if(gltf.raw.nodes == null) gltf.raw.nodes = new Array<TNode>();
+        for(node in gltf.raw.nodes) {
+            // if they all need filling in...
+            if(node.matrix == null && node.rotation == null && node.scale == null && node.translation == null) {
+                // ignore the transform for this node!
+            }
+            // if the components need filling in...
+            else if(node.matrix != null) {
+                // TODO: verify the correctness of this!
+                // TODO: move these calculations into GLM!
+                trace('calculating transform components');
+                var a:Array<Float> = node.matrix;
+
+                node.translation = new Array<Float>();
+                node.translation.push(a[12]);
+                node.translation.push(a[13]);
+                node.translation.push(a[14]);
+
+                var sx:Float = Math.sqrt(a[0]*a[0] + a[1]*a[1] + a[2]*a[2] + a[3]*a[3]);
+                var sy:Float = Math.sqrt(a[4]*a[4] + a[5]*a[5] + a[6]*a[6] + a[7]*a[7]);
+                var sz:Float = Math.sqrt(a[8]*a[8] + a[9]*a[9] + a[10]*a[10] + a[11]*a[11]);
+                node.scale = new Array<Float>();
+                node.scale.push(sx); node.scale.push(sy); node.scale.push(sz);
+
+                var m00 = a[0] / sx; var m11 = a[5] / sy; var m22 = a[10] / sz;
+                node.rotation = new Array<Float>();
+                node.rotation.push(Math.sqrt(Math.max(0.0, 1.0 + m00 - m11 - m22)) / 2.0);
+                node.rotation.push(Math.sqrt(Math.max(0.0, 1.0 - m00 + m11 - m22)) / 2.0);
+                node.rotation.push(Math.sqrt(Math.max(0.0, 1.0 - m00 - m11 + m22)) / 2.0);
+                node.rotation.push(Math.sqrt(Math.max(0.0, 1.0 + m00 + m11 + m22)) / 2.0);
+            }
+            // if the matrix needs filling in..
+            else if(node.matrix == null && (node.rotation != null || node.scale != null || node.translation != null)) {
+                trace('filling in matrix');
+                if(node.rotation == null) node.rotation = [ 0.0, 0.0, 0.0, 1.0 ];
+                if(node.scale == null) node.scale = [ 1.0, 1.0, 1.0 ];
+                if(node.translation == null) node.translation = [ 0.0, 0.0, 0.0 ];
+
+                var m:Mat4 = glm.GLM.transform(node.translation, node.rotation, node.scale, new Mat4());
+                node.matrix = m;
+            }
+            else {
+                throw 'Unhandled transform case: ${node.matrix == null} ${node.translation == null} ${node.rotation == null} ${node.scale == null}';
+            }
+        }
+
         if(gltf.raw.samplers == null) gltf.raw.samplers = new Array<TSampler>();
         for(sampler in gltf.raw.samplers) {
             if(sampler.magFilter == null) sampler.magFilter = TMagFilter.LINEAR;
@@ -106,6 +164,29 @@ class GLTF {
             for(buffer in buffers) {
                 trace('Loaded ${buffer.length} bytes into buffer!');
             }
+
+            // TODO: actually link and load stuff!
+
+            var nodes:Array<Node> = new Array<Node>();
+            for(rawNode in raw.nodes) {
+                var node:Node = {
+                    transform: rawNode.matrix == null ? null : rawNode.matrix
+                };
+                nodes.push(node);
+            }
+
+            var scenes:Array<Scene> = new Array<Scene>();
+            for(rawScene in raw.scenes) {
+                var scene:Scene = {
+                    nodes: new Array<Node>()
+                };
+                for(nid in rawScene.nodes) {
+                    scene.nodes.push(nodes[nid]);
+                }
+                scenes.push(scene);
+            }
+            this.scenes = scenes;
+            this.defaultScene = scenes[raw.scene];
 
             var f:FutureTrigger<GLTF> = Future.trigger();
             f.trigger(this);
