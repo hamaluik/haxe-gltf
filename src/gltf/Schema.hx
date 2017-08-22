@@ -1,5 +1,19 @@
 package gltf;
 
+typedef TGLTFProperty = {
+    @:optional var extensions:Dynamic;
+    @:optional var extras:Dynamic;
+}
+
+typedef TGLTFChildOfRootProperty = {
+    /**
+     *  The user-defined name of this object.  This is not necessarily unique, e.g., an accessor and a buffer could have the same name, or two accessors could even have the same name.
+     */
+    @:optional var name:String;
+}
+
+typedef TGLTFID = Int;
+
 /**
  *  A typed view into a bufferView.  A bufferView contains raw binary data.  An accessor provides a typed view into a bufferView or a subset of a bufferView similar to how WebGL's `vertexAttribPointer()` defines an attribute in a buffer.
  */
@@ -213,10 +227,87 @@ typedef TBufferView = {
 }
 
 /**
- *  TODO: implement the Camera schema!
+ *  Specifies if the camera uses a perspective or orthographic projection.  Based on this, either the camera's `perspective` or `orthographic` property will be defined.
+ */
+@:enum abstract TCameraType(String) {
+    var PERSPECTIVE = "perspective";
+    var ORTHOGRAPHIC = "orthographic";
+}
+
+/**
+ *  An orthographic camera containing properties to create an orthographic projection matrix.
+ */
+typedef TCameraOrthographic = {
+    >TGLTFProperty,
+
+    /**
+     *  The floating-point horizontal magnification of the view. Must not be zero.
+     */
+    var xmag:Float;
+
+    /**
+     *  The floating-point vertical magnification of the view. Must not be zero.
+     */
+    var ymag:Float;
+
+    /**
+     *  The floating-point distance to the far clipping plane. `zfar` must be greater than `znear`.
+     */
+    var zfar:Float;
+
+    /**
+     *  The floating-point distance to the near clipping plane.
+     */
+    var znear:Float;
+}
+
+/**
+ *  A perspective camera containing properties to create a perspective projection matrix.
+ */
+typedef TCameraPerspective = {
+    >TGLTFProperty,
+
+    /**
+     *  The floating-point aspect ratio of the field of view. When this is undefined, the aspect ratio of the canvas is used.
+     */
+    @:optional var aspectRatio:Float;
+
+    /**
+     *  The floating-point vertical field of view in radians.
+     */
+    var yfov:Float;
+
+    /**
+     *  The floating-point distance to the far clipping plane. When defined, `zfar` must be greater than `znear`. If `zfar` is undefined, runtime must use infinite projection matrix.
+     */
+    @:optional var zfar:Float;
+
+    /**
+     *  The floating-point distance to the near clipping plane.
+     */
+    var znear:Float;
+}
+
+/**
+ *  A camera's projection.  A node can reference a camera to apply a transform to place the camera in the scene.
  */
 typedef TCamera = {
+    >TGLTFChildOfRootProperty,
 
+    /**
+     *  An orthographic camera containing properties to create an orthographic projection matrix.
+     */
+    @:optional var orthographic:TCameraOrthographic;
+
+    /**
+     *  A perspective camera containing properties to create a perspective projection matrix.
+     */
+    @:optional var perspective:TCameraPerspective;
+
+    /**
+     *  Specifies if the camera uses a perspective or orthographic projection.  Based on this, either the camera's `perspective` or `orthographic` property will be defined.
+     */
+    var type:TCameraType;
 }
 
 /**
@@ -320,20 +411,6 @@ typedef TGLTF = {
      */
     @:optional var textures:Array<TTexture>;
 }
-
-typedef TGLTFChildOfRootProperty = {
-    /**
-     *  The user-defined name of this object.  This is not necessarily unique, e.g., an accessor and a buffer could have the same name, or two accessors could even have the same name.
-     */
-    @:optional var name:String;
-}
-
-typedef TGLTFProperty = {
-    @:optional var extensions:Dynamic;
-    @:optional var extras:Dynamic;
-}
-
-typedef TGLTFID = Int;
 
 /**
  *  Image data used to create a texture. Image can be referenced by URI or `bufferView` index. `mimeType` is required in the latter case.

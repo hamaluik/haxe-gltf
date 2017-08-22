@@ -80,6 +80,8 @@ class GLTF {
             if(bufferView.byteOffset == null) bufferView.byteOffset = 0;
         }
 
+        if(gltf.raw.cameras == null) gltf.raw.cameras = new Array<TCamera>();
+
         if(gltf.raw.images == null) gltf.raw.images = new Array<TImage>();
 
         if(gltf.raw.nodes == null) gltf.raw.nodes = new Array<TNode>();
