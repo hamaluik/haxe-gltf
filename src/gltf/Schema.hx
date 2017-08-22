@@ -128,10 +128,111 @@ typedef TAccessorSparseValues = {
 }
 
 /**
- *  TODO: implement the Animation schema!
+ *  The name of the node's TRS property to modify, or the \"weights\" of the Morph Targets it instantiates.
+ */
+@:enum abstract TAnimationChannelTargetPath(String) {
+    var TRANSLATION = "translation";
+    var ROTATION = "rotation";
+    var SCALE = "scale";
+    var WEIGHTS = "weights";
+}
+
+/**
+ *  The index of the node and TRS property that an animation channel targets.
+ */
+typedef TAnimationChannelTarget = {
+    >TGLTFProperty,
+
+    /**
+     *  The index of the node to target.
+     */
+    @:optional var node:TGLTFID;
+
+    /**
+     *  The name of the node's TRS property to modify, or the "weights" of the Morph Targets it instantiates.
+     */
+    var path:TAnimationChannelTargetPath;
+}
+
+/**
+ *  Targets an animation's sampler at a node's property.
+ */
+typedef TAnimationChannel = {
+    >TGLTFProperty,
+
+    /**
+     *  The index of a sampler in this animation used to compute the value for the target, e.g., a node's translation, rotation, or scale (TRS).
+     */
+    var sampler:TGLTFID;
+
+    /**
+     *  The index of the node and TRS property to target.
+     */
+    var target:TAnimationChannelTarget;
+}
+
+/**
+ *  Interpolation algorithm.
+ */
+@:enum abstract TAnimationInterpolation(String) {
+    /**
+     *  The animated values are linearly interpolated between keyframes. When targeting a rotation, spherical linear interpolation (slerp) should be used to interpolate quaternions. The number output of elements must equal the number of input elements.
+     */
+    var LINEAR = "LINEAR";
+
+    /**
+     *  The animated values remain constant to the output of the first keyframe, until the next keyframe. The number of output elements must equal the number of input elements.
+     */
+    var STEP = "STEP";
+
+    /**
+     *  The animation's interpolation is computed using a uniform Catmull-Rom spline. The number of output elements must equal two more than the number of input elements. The first and last output elements represent the start and end tangents of the spline. There must be at least four keyframes when using this interpolation.
+     */
+    var CATMULLROMSPLINE = "CATMULLROMSPLINE";
+
+    /**
+     *  The animation's interpolation is computed using a cubic spline with specified tangents. The number of output elements must equal three times the number of input elements. For each input element, the output stores three elements, an in-tangent, a spline vertex, and an out-tangent. There must be at least two keyframes when using this interpolation.
+     */
+    var CUBICSPLINE = "CUBICSPLINE";
+}
+
+/**
+ *  Combines input and output accessors with an interpolation algorithm to define a keyframe graph (but not its target).
+ */
+typedef TAnimationSampler = {
+    >TGLTFProperty,
+
+    /**
+     *  The index of an accessor containing keyframe input values, e.g., time. That accessor must have componentType `FLOAT`. The values represent time in seconds with `time[0] >= 0.0`, and strictly increasing values, i.e., `time[n + 1] > time[n]`.
+     */
+    var input:TGLTFID;
+
+    /**
+     *  Interpolation algorithm.
+     */
+    @:optional var interpolation:TAnimationInterpolation;
+
+    /**
+     *  The index of an accessor containing keyframe output values. When targeting TRS target, the `accessor.componentType` of the output values must be `FLOAT`. When targeting morph weights, the `accessor.componentType` of the output values must be `FLOAT` or normalized integer where each output element stores values with a count equal to the number of morph targets.
+     */
+    var output:TGLTFID;
+}
+
+/**
+ *  A keyframe animation.
  */
 typedef TAnimation = {
+    >TGLTFChildOfRootProperty,
 
+    /**
+     *  An array of channels, each of which targets an animation's sampler at a node's property. Different channels of the same animation can't have equal targets.
+     */
+    var channels:Array<TAnimationChannel>;
+
+    /**
+     *  An array of samplers that combines input and output accessors with an interpolation algorithm to define a keyframe graph (but not its target).
+     */
+    var samplers:Array<TAnimationSampler>;
 }
 
 /**

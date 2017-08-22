@@ -73,6 +73,13 @@ class GLTF {
             }
         }
 
+        if(gltf.raw.animations == null) gltf.raw.animations = new Array<TAnimation>();
+        for(animation in gltf.raw.animations) {
+            for(sampler in animation.samplers) {
+                if(sampler.interpolation == null) sampler.interpolation = TAnimationInterpolation.LINEAR;
+            }
+        }
+
         if(gltf.raw.buffers == null) gltf.raw.buffers = new Array<TBuffer>();
 
         if(gltf.raw.bufferViews == null) gltf.raw.bufferViews = new Array<TBufferView>();
