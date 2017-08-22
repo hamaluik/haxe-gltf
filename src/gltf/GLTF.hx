@@ -183,6 +183,8 @@ class GLTF {
 
         if(gltf.raw.scenes == null) gltf.raw.scenes = new Array<TScene>();
 
+        if(gltf.raw.skins == null) gltf.raw.skins = new Array<TSkin>();
+
         if(gltf.raw.textures == null) gltf.raw.textures = new Array<TTexture>();
         for(texture in gltf.raw.textures) {
             if(texture.sampler == null) texture.sampler = -1; // TODO: better index to default sampler?
