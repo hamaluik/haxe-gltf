@@ -84,6 +84,39 @@ class GLTF {
 
         if(gltf.raw.images == null) gltf.raw.images = new Array<TImage>();
 
+        if(gltf.raw.materials == null) gltf.raw.materials = new Array<TMaterial>();
+        for(material in gltf.raw.materials) {
+            if(material.normalTexture != null) {
+                if(material.normalTexture.texCoord == null) material.normalTexture.texCoord = 0;
+                if(material.normalTexture.scale == null) material.normalTexture.scale = 1.0;
+            }
+
+            if(material.occlusionTexture != null) {
+                if(material.occlusionTexture.texCoord == null) material.occlusionTexture.texCoord = 0;
+                if(material.occlusionTexture.strength == null) material.occlusionTexture.strength = 1.0;
+            }
+
+            if(material.pbrMetallicRoughness != null) {
+                if(material.pbrMetallicRoughness.baseColorFactor == null) material.pbrMetallicRoughness.baseColorFactor = [1.0, 1.0, 1.0, 1.0];
+                if(material.pbrMetallicRoughness.baseColorTexture != null) {
+                    if(material.pbrMetallicRoughness.baseColorTexture.texCoord == null) material.pbrMetallicRoughness.baseColorTexture.texCoord = 0;
+                }
+                if(material.pbrMetallicRoughness.metallicFactor == null) material.pbrMetallicRoughness.metallicFactor = 1.0;
+                if(material.pbrMetallicRoughness.roughnessFactor == null) material.pbrMetallicRoughness.roughnessFactor = 1.0;
+                if(material.pbrMetallicRoughness.metallicRoughnessTexture != null) {
+                    if(material.pbrMetallicRoughness.metallicRoughnessTexture.texCoord == null) material.pbrMetallicRoughness.metallicRoughnessTexture.texCoord = 0;
+                }
+            }
+
+            if(material.emissiveTexture != null) {
+                if(material.emissiveTexture.texCoord == null) material.emissiveTexture.texCoord = 0;
+            }
+
+            if(material.emissiveFactor == null) material.emissiveFactor = [0.0, 0.0, 0.0];
+            if(material.alphaCutoff == null) material.alphaCutoff = 0.5;
+            if(material.doubleSided == null) material.doubleSided = false;
+        }
+
         if(gltf.raw.nodes == null) gltf.raw.nodes = new Array<TNode>();
         for(node in gltf.raw.nodes) {
             // if they all need filling in...

@@ -435,10 +435,143 @@ typedef TImage = {
 }
 
 /**
- *  TODO: implement the Material schema!
+ *  Reference to a texture.
+ */
+typedef TTextureInfo = {
+    >TGLTFProperty,
+
+    /**
+     *  The index of the texture.
+     */
+    var index:TGLTFID;
+
+    /**
+     *  This integer value is used to construct a string in the format TEXCOORD_<set index> which is a reference to a key in mesh.primitives.attributes (e.g. A value of 0 corresponds to TEXCOORD_0).
+     */
+    @:optional var texCoord:Int;
+}
+
+/**
+ *  A set of parameter values that are used to define the metallic-roughness material model from Physically-Based Rendering (PBR) methodology.
+ */
+typedef TMaterialPBRMetallicRoughness = {
+    >TGLTFProperty,
+
+    /**
+     *  The RGBA components of the base color of the material. The fourth component (A) is the alpha coverage of the material. The `alphaMode` property specifies how alpha is interpreted. These values are linear. If a baseColorTexture is specified, this value is multiplied with the texel values.
+     */
+    @:optional var baseColorFactor:Array<Float>;
+
+    /**
+     *  The base color texture. This texture contains RGB(A) components in sRGB color space. The first three components (RGB) specify the base color of the material. If the fourth component (A) is present, it represents the alpha coverage of the material. Otherwise, an alpha of 1.0 is assumed. The `alphaMode` property specifies how alpha is interpreted. The stored texels must not be premultiplied.
+     */
+    @:optional var baseColorTexture:TTextureInfo;
+
+    /**
+     *  The metalness of the material. A value of 1.0 means the material is a metal. A value of 0.0 means the material is a dielectric. Values in between are for blending between metals and dielectrics such as dirty metallic surfaces. This value is linear. If a metallicRoughnessTexture is specified, this value is multiplied with the metallic texel values.
+     */
+    @:optional var metallicFactor:Float;
+
+    /**
+     *  The roughness of the material. A value of 1.0 means the material is completely rough. A value of 0.0 means the material is completely smooth. This value is linear. If a metallicRoughnessTexture is specified, this value is multiplied with the roughness texel values.
+     */
+    @:optional var roughnessFactor:Float;
+
+    /**
+     *  The metallic-roughness texture. The metalness values are sampled from the B channel. The roughness values are sampled from the G channel. These values are linear. If other channels are present (R or A), they are ignored for metallic-roughness calculations.
+     */
+    @:optional var metallicRoughnessTexture:TTextureInfo;
+}
+
+/**
+ *  Material Normal Texture Info
+ */
+typedef TMaterialNormalTextureInfo = {
+    >TTextureInfo,
+
+    /**
+     *  The scalar multiplier applied to each normal vector of the texture. This value scales the normal vector using the formula: `scaledNormal =  normalize((normalize(<sampled normal texture value>) * 2.0 - 1.0) * vec3(<normal scale>, <normal scale>, 1.0))`. This value is ignored if normalTexture is not specified. This value is linear.
+     */
+    @:optional var scale:Float;
+}
+
+/**
+ *  Material Occlusion Texture Info
+ */
+typedef TMaterialOcclusionTextureInfo = {
+    >TTextureInfo,
+
+    /**
+     *  A scalar multiplier controlling the amount of occlusion applied. A value of 0.0 means no occlusion. A value of 1.0 means full occlusion. This value affects the resulting color using the formula: `occludedColor = lerp(color, color * <sampled occlusion texture value>, <occlusion strength>)`. This value is ignored if the corresponding texture is not specified. This value is linear.
+     */
+    @:optional var strength:Float;
+}
+
+/**
+ *  The material's alpha rendering mode enumeration specifying the interpretation of the alpha value of the main factor and texture.
+ */
+@:enum abstract TAlphaMode(String) {
+    /**
+     *  The alpha value is ignored and the rendered output is fully opaque.
+     */
+    var OPAQUE = "OPAQUE";
+
+    /**
+     *  The rendered output is either fully opaque or fully transparent depending on the alpha value and the specified alpha cutoff value.
+     */
+    var MASK = "MASK";
+
+    /**
+     *  The alpha value is used to composite the source and destination areas. The rendered output is combined with the background using the normal painting operation (i.e. the Porter and Duff over operator).
+     */
+    var BLEND = "BLEND";
+}
+
+/**
+ *  The material appearance of a primitive.
  */
 typedef TMaterial = {
+    >TGLTFChildOfRootProperty,
 
+    /**
+     *  A set of parameter values that are used to define the metallic-roughness material model from Physically-Based Rendering (PBR) methodology. When not specified, all the default values of `pbrMetallicRoughness` apply.
+     */
+    @:optional var pbrMetallicRoughness:TMaterialPBRMetallicRoughness;
+
+    /**
+     *  A tangent space normal map. The texture contains RGB components in linear space. Each texel represents the XYZ components of a normal vector in tangent space. Red [0 to 255] maps to X [-1 to 1]. Green [0 to 255] maps to Y [-1 to 1]. Blue [128 to 255] maps to Z [1/255 to 1]. The normal vectors use OpenGL conventions where +X is right and +Y is up. +Z points toward the viewer. In GLSL, this vector would be unpacked like so: `float3 normalVector = tex2D(<sampled normal map texture value>, texCoord) * 2 - 1`.
+     */
+    @:optional var normalTexture:TMaterialNormalTextureInfo;
+
+    /**
+     *  The occlusion map texture. The occlusion values are sampled from the R channel. Higher values indicate areas that should receive full indirect lighting and lower values indicate no indirect lighting. These values are linear. If other channels are present (GBA), they are ignored for occlusion calculations.
+     */
+    @:optional var occlusionTexture:TMaterialOcclusionTextureInfo;
+
+    /**
+     *  The emissive map controls the color and intensity of the light being emitted by the material. This texture contains RGB components in sRGB color space. If a fourth component (A) is present, it is ignored.
+     */
+    @:optional var emissiveTexture:TTextureInfo;
+
+    /**
+     *  The RGB components of the emissive color of the material. These values are linear. If an emissiveTexture is specified, this value is multiplied with the texel values.
+     */
+    @:optional var emissiveFactor:Array<Float>;
+
+    /**
+     *  The material's alpha rendering mode enumeration specifying the interpretation of the alpha value of the main factor and texture.
+     */
+    @:optional var alphaMode:TAlphaMode;
+
+    /**
+     *  Specifies the cutoff threshold when in `MASK` mode. If the alpha value is greater than or equal to this value then it is rendered as fully opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0 will render the entire material as fully transparent. This value is ignored for other modes.
+     */
+    @:optional var alphaCutoff:Float;
+
+    /**
+     *  Specifies whether the material is double sided. When this value is false, back-face culling is enabled. When this value is true, back-face culling is disabled and double sided lighting is enabled. The back-face must have its normals reversed before the lighting equation is evaluated.
+     */
+    @:optional var doubleSided:Bool;
 }
 
 /**
