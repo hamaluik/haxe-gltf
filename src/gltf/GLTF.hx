@@ -117,6 +117,14 @@ class GLTF {
             if(material.doubleSided == null) material.doubleSided = false;
         }
 
+        if(gltf.raw.meshes == null) gltf.raw.meshes = new Array<TMesh>();
+        for(mesh in gltf.raw.meshes) {
+            if(mesh.primitives == null) mesh.primitives = new Array<TMeshPrimitive>();
+            for(primitive in mesh.primitives) {
+                if(primitive.mode == null) primitive.mode = TMeshPrimitiveType.TRIANGLES;
+            }
+        }
+
         if(gltf.raw.nodes == null) gltf.raw.nodes = new Array<TNode>();
         for(node in gltf.raw.nodes) {
             // if they all need filling in...
