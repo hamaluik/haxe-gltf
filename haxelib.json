@@ -1,5 +1,6 @@
 {
   "name": "gltf",
+  "classPath": "src",
   "url" : "https://github.com/FuzzyWuzzie/haxe-gltf",
   "license": "Apache",
   "tags": ["cross", "utility"],

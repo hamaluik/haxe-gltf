@@ -1,8 +1,6 @@
 -cp src
 
--lib tink_core
--lib glm
-
--main Main
+gltf.GLTF
+gltf.Schema
 
 --interp

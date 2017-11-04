@@ -1,51 +1,18 @@
 package gltf;
 
-import haxe.io.Bytes;
 import gltf.Schema;
-import tink.core.Promise;
-import tink.core.Future;
-import glm.Mat4;
-
-// TODO: node types?
-typedef Node = {
-    @:optional var transform:Mat4;
-}
-
-typedef Scene = {
-    var nodes:Array<Node>;
-}
 
 /**
  *  An object representing a glTF scene
  */
 class GLTF {
     /**
-     *  The raw glTF data structures; you probably don't care about these if you've called `load()`
+     *  The raw glTF data structures
      */
     public var raw:TGLTF = null;
 
-    // TODO: object layout?
-    public var scenes:Array<Scene> = new Array<Scene>();
-    public var defaultScene:Scene = null;
-
     public function new(?raw:TGLTF) {
         this.raw = raw;
-    }
-
-    /**
-     *  Parses and loads a glTF file in one step
-     *  @param uri - The uri of the glTF file to load
-     *  @param assetFetcher - a function which takes in a URI and returns a promise with the contents
-     *  @return Promise<GLTF>
-     */
-    public static function parseAndLoad(uri:String, assetFetcher:String->Promise<Bytes>):Promise<GLTF> {
-        return assetFetcher(uri)
-        .next(function(data:Bytes):Promise<GLTF> {
-            return GLTF.parse(data.toString());
-        })
-        .next(function(glTF:GLTF) {
-            return glTF.load(assetFetcher);
-        });
     }
 
     /**
@@ -53,9 +20,7 @@ class GLTF {
      *  @param src - The glTF source
      *  @return GLTF
      */
-    public static function parse(src:String):Future<GLTF> {
-        var f:FutureTrigger<GLTF> = new FutureTrigger<GLTF>();
-
+    public static function parse(src:String):GLTF {
         var gltf:GLTF = new GLTF();
         gltf.raw = cast(haxe.Json.parse(src));
 
@@ -140,9 +105,6 @@ class GLTF {
             }
             // if the components need filling in...
             else if(node.matrix != null) {
-                // TODO: verify the correctness of this!
-                // TODO: move these calculations into GLM!
-                trace('calculating transform components');
                 var a:Array<Float> = node.matrix;
 
                 node.translation = new Array<Float>();
@@ -170,8 +132,41 @@ class GLTF {
                 if(node.scale == null) node.scale = [ 1.0, 1.0, 1.0 ];
                 if(node.translation == null) node.translation = [ 0.0, 0.0, 0.0 ];
 
-                var m:Mat4 = glm.GLM.transform(node.translation, node.rotation, node.scale, new Mat4());
-                node.matrix = m;
+                var x2:Float = node.rotation[0] + node.rotation[0];
+                var y2:Float = node.rotation[1] + node.rotation[1];
+                var z2:Float = node.rotation[2] + node.rotation[2];
+
+                var xx:Float = node.rotation[0] * x2;
+                var xy:Float = node.rotation[0] * y2;
+                var xz:Float = node.rotation[0] * z2;
+                var yy:Float = node.rotation[1] * y2;
+                var yz:Float = node.rotation[1] * z2;
+                var zz:Float = node.rotation[2] * z2;
+                var wx:Float = node.rotation[3] * x2;
+                var wy:Float = node.rotation[3] * y2;
+                var wz:Float = node.rotation[3] * z2;
+
+                node.matrix = [
+                    (1 - (yy + zz)) * node.scale[0],
+                    (xy + wz) * node.scale[0],
+                    (xz - wy) * node.scale[0],
+                    0,
+
+                    (xy - wz) * node.scale[1],
+                    (1 - (xx + zz)) * node.scale[1],
+                    (yz + wx) * node.scale[1],
+                    0,
+
+                    (xz + wy) * node.scale[2],
+                    (yz - wx) * node.scale[2],
+                    (1 - (xx + yy)) * node.scale[2],
+                    0,
+
+                    node.translation[0],
+                    node.translation[1],
+                    node.translation[2],
+                    1
+                ];
             }
             else {
                 throw 'Unhandled transform case: ${node.matrix == null} ${node.translation == null} ${node.rotation == null} ${node.scale == null}';
@@ -197,52 +192,6 @@ class GLTF {
             if(texture.sampler == null) texture.sampler = -1; // TODO: better index to default sampler?
         }
 
-        f.trigger(gltf);
-        return f;
-    }
-
-    /**
-     *  Loads the raw glTF data into a more usable object
-     *  @param assetFetcher - a function which takes in a URI and returns a promise with the contents
-     *  @return Surprise<GLTF, Dynamic>
-     */
-    public function load(assetFetcher:String->Promise<Bytes>):Promise<GLTF> {
-        var _buffers:Array<Bytes> = new Array<Bytes>();
-
-        return Promise.inParallel([for(buffer in raw.buffers) assetFetcher(buffer.uri)])
-        .next(function(buffers:Array<Bytes>) {
-            _buffers = buffers;
-
-            for(buffer in buffers) {
-                trace('Loaded ${buffer.length} bytes into buffer!');
-            }
-
-            // TODO: actually link and load stuff!
-
-            var nodes:Array<Node> = new Array<Node>();
-            for(rawNode in raw.nodes) {
-                var node:Node = {
-                    transform: rawNode.matrix == null ? null : rawNode.matrix
-                };
-                nodes.push(node);
-            }
-
-            var scenes:Array<Scene> = new Array<Scene>();
-            for(rawScene in raw.scenes) {
-                var scene:Scene = {
-                    nodes: new Array<Node>()
-                };
-                for(nid in rawScene.nodes) {
-                    scene.nodes.push(nodes[nid]);
-                }
-                scenes.push(scene);
-            }
-            this.scenes = scenes;
-            this.defaultScene = scenes[raw.scene];
-
-            var f:FutureTrigger<GLTF> = Future.trigger();
-            f.trigger(this);
-            return f.asFuture();
-        });
+        return gltf;
     }
 }
