@@ -1,31 +1,36 @@
 package gltf;
 
 import gltf.Schema;
+import haxe.ds.Vector;
 
 /**
  *  An object representing a glTF scene
  */
 class GLTF {
-    /**
-     *  The raw glTF data structures
-     */
-    public var raw:TGLTF = null;
+    public var nodes(default, null):Vector<Node> = new Vector<Node>(0);
+    public var scenes(default, null):Vector<Scene> = new Vector<Scene>(0);
 
-    public function new(?raw:TGLTF) {
-        this.raw = raw;
+    function new() {}
+
+    public static function load(raw:TGLTF):GLTF {
+        var gltf:GLTF = new GLTF();
+
+        gltf.nodes = Node.loadFromRaw(gltf, raw);
+        gltf.scenes = Scene.loadFromRaw(gltf, raw);
+
+        return gltf;
     }
 
     /**
-     *  Parse a glTF string into the `raw` field of the GLTF
+     *  Parse a glTF json string into typedef'd structs
      *  @param src - The glTF source
-     *  @return GLTF
+     *  @return TGLTF
      */
-    public static function parse(src:String):GLTF {
-        var gltf:GLTF = new GLTF();
-        gltf.raw = cast(haxe.Json.parse(src));
+    public static function parse(src:String):TGLTF {
+        var gltf:TGLTF = cast(haxe.Json.parse(src));
 
-        if(gltf.raw.accessors == null) gltf.raw.accessors = new Array<TAccessor>();
-        for(accessor in gltf.raw.accessors) {
+        if(gltf.accessors == null) gltf.accessors = new Array<TAccessor>();
+        for(accessor in gltf.accessors) {
             if(accessor.bufferView == null){} // TODO: initialize the accessor with zeros
             if(accessor.byteOffset == null) accessor.byteOffset = 0;
             if(accessor.normalized == null) accessor.normalized = false;
@@ -38,26 +43,26 @@ class GLTF {
             }
         }
 
-        if(gltf.raw.animations == null) gltf.raw.animations = new Array<TAnimation>();
-        for(animation in gltf.raw.animations) {
+        if(gltf.animations == null) gltf.animations = new Array<TAnimation>();
+        for(animation in gltf.animations) {
             for(sampler in animation.samplers) {
                 if(sampler.interpolation == null) sampler.interpolation = TAnimationInterpolation.LINEAR;
             }
         }
 
-        if(gltf.raw.buffers == null) gltf.raw.buffers = new Array<TBuffer>();
+        if(gltf.buffers == null) gltf.buffers = new Array<TBuffer>();
 
-        if(gltf.raw.bufferViews == null) gltf.raw.bufferViews = new Array<TBufferView>();
-        for(bufferView in gltf.raw.bufferViews) {
+        if(gltf.bufferViews == null) gltf.bufferViews = new Array<TBufferView>();
+        for(bufferView in gltf.bufferViews) {
             if(bufferView.byteOffset == null) bufferView.byteOffset = 0;
         }
 
-        if(gltf.raw.cameras == null) gltf.raw.cameras = new Array<TCamera>();
+        if(gltf.cameras == null) gltf.cameras = new Array<TCamera>();
 
-        if(gltf.raw.images == null) gltf.raw.images = new Array<TImage>();
+        if(gltf.images == null) gltf.images = new Array<TImage>();
 
-        if(gltf.raw.materials == null) gltf.raw.materials = new Array<TMaterial>();
-        for(material in gltf.raw.materials) {
+        if(gltf.materials == null) gltf.materials = new Array<TMaterial>();
+        for(material in gltf.materials) {
             if(material.normalTexture != null) {
                 if(material.normalTexture.texCoord == null) material.normalTexture.texCoord = 0;
                 if(material.normalTexture.scale == null) material.normalTexture.scale = 1.0;
@@ -89,16 +94,16 @@ class GLTF {
             if(material.doubleSided == null) material.doubleSided = false;
         }
 
-        if(gltf.raw.meshes == null) gltf.raw.meshes = new Array<TMesh>();
-        for(mesh in gltf.raw.meshes) {
+        if(gltf.meshes == null) gltf.meshes = new Array<TMesh>();
+        for(mesh in gltf.meshes) {
             if(mesh.primitives == null) mesh.primitives = new Array<TMeshPrimitive>();
             for(primitive in mesh.primitives) {
                 if(primitive.mode == null) primitive.mode = TMeshPrimitiveType.TRIANGLES;
             }
         }
 
-        if(gltf.raw.nodes == null) gltf.raw.nodes = new Array<TNode>();
-        for(node in gltf.raw.nodes) {
+        if(gltf.nodes == null) gltf.nodes = new Array<TNode>();
+        for(node in gltf.nodes) {
             // if they all need filling in...
             if(node.matrix == null && node.rotation == null && node.scale == null && node.translation == null) {
                 // ignore the transform for this node!
@@ -173,22 +178,22 @@ class GLTF {
             }
         }
 
-        if(gltf.raw.samplers == null) gltf.raw.samplers = new Array<TSampler>();
-        for(sampler in gltf.raw.samplers) {
+        if(gltf.samplers == null) gltf.samplers = new Array<TSampler>();
+        for(sampler in gltf.samplers) {
             if(sampler.magFilter == null) sampler.magFilter = TMagFilter.LINEAR;
             if(sampler.minFilter == null) sampler.minFilter = TMinFilter.LINEAR;
             if(sampler.wrapS == null) sampler.wrapS = TWrapMode.REPEAT;
             if(sampler.wrapT == null) sampler.wrapT = TWrapMode.REPEAT;
         }
 
-        if(gltf.raw.scene == null) gltf.raw.scene = 0;
+        if(gltf.scene == null) gltf.scene = 0;
 
-        if(gltf.raw.scenes == null) gltf.raw.scenes = new Array<TScene>();
+        if(gltf.scenes == null) gltf.scenes = new Array<TScene>();
 
-        if(gltf.raw.skins == null) gltf.raw.skins = new Array<TSkin>();
+        if(gltf.skins == null) gltf.skins = new Array<TSkin>();
 
-        if(gltf.raw.textures == null) gltf.raw.textures = new Array<TTexture>();
-        for(texture in gltf.raw.textures) {
+        if(gltf.textures == null) gltf.textures = new Array<TTexture>();
+        for(texture in gltf.textures) {
             if(texture.sampler == null) texture.sampler = -1; // TODO: better index to default sampler?
         }
 
