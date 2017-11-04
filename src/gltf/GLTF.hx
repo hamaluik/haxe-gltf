@@ -8,6 +8,7 @@ import haxe.ds.Vector;
  */
 class GLTF {
     public var nodes(default, null):Vector<Node> = new Vector<Node>(0);
+    public var defaultScene(default, null):Scene = null;
     public var scenes(default, null):Vector<Scene> = new Vector<Scene>(0);
 
     function new() {}
@@ -17,6 +18,7 @@ class GLTF {
 
         gltf.nodes = Node.loadFromRaw(gltf, raw);
         gltf.scenes = Scene.loadFromRaw(gltf, raw);
+        gltf.defaultScene = gltf.scenes[raw.scene];
 
         return gltf;
     }

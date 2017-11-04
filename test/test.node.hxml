@@ -1,4 +1,5 @@
 test.each.hxml
--D nodejs
+#-D nodejs
+-lib hxnodejs
 -js bin/TestMain.node.js
 -cmd node bin/TestMain.node.js

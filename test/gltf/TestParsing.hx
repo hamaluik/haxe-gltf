@@ -3,20 +3,20 @@ package gltf;
 import buddy.*;
 using buddy.Should;
 
-using gltf.GLTF;
+import gltf.Schema;
 
 class TestParsing extends BuddySuite {
 	public function new() {
 		describe('Parsing GLTF', {
-			var boxSrc:String = haxe.Http.requestUrl('https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Box/glTF/Box.gltf');
+			var boxSrc:String = sys.io.File.getContent('samples/Box.gltf');
 
 			it("should parse gltf files", {
-				var gltf:GLTF = GLTF.parse(boxSrc);
+				var raw:TGLTF = GLTF.parse(boxSrc);
 
-				gltf.raw.asset.generator.should.be("COLLADA2GLTF");
-				gltf.raw.asset.version.should.be("2.0");
+				raw.asset.generator.should.be("COLLADA2GLTF");
+				raw.asset.version.should.be("2.0");
 
-				gltf.raw.scene.should.be(0);
+				raw.scene.should.be(0);
 			});
 
 			it("should parse glb files");

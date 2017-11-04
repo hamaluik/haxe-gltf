@@ -30,6 +30,7 @@ install:
   # haxelib dependencies for each target
   - sh -c "if [ '$TARGET' = 'cpp' ]; then haxelib install hxcpp; fi"
   - sh -c "if [ '$TARGET' = 'java' ]; then haxelib install hxjava; fi"
+  - sh -c "if [ '$TARGET' = 'node' ]; then haxelib install hxnodejs; fi"
 
 script:
   - haxe test/test.${TARGET}.hxml
