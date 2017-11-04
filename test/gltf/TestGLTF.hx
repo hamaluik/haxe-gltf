@@ -7,11 +7,12 @@ using gltf.GLTF;
 
 class TestGLTF extends BuddySuite {
 	public function new() {
-		describe('Using GLTFs', {
+		describe('Using GLTF', {
 			beforeEach({
 			});
 
-			it("should provide ...?");
+			it("should parse gltf files");
+			it("should parse glb files");
 		});
 	}
 }
