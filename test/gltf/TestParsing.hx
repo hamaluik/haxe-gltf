@@ -1,9 +1,8 @@
 package gltf;
 
+import gltf.schema.TGLTF;
 import buddy.*;
 using buddy.Should;
-
-import gltf.Schema;
 
 class TestParsing extends BuddySuite {
 	public function new() {

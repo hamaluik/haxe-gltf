@@ -1,6 +1,5 @@
 -cp src
 
 gltf.GLTF
-gltf.Schema
 
 --interp

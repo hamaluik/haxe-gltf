@@ -1,4 +1,4 @@
-package gltf;
+package gltf.types;
 
 class MeshPrimitive {
     

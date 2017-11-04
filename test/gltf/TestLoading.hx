@@ -1,5 +1,6 @@
 package gltf;
 
+import gltf.schema.TGLTF;
 import buddy.*;
 using buddy.Should;
 
@@ -7,7 +8,7 @@ class TestLoading extends BuddySuite {
 	public function new() {
 		describe('Loading GLTFs', {
 			var boxSrc:String = sys.io.File.getContent('samples/Box.gltf');
-			var raw:Schema.TGLTF = GLTF.parse(boxSrc);
+			var raw:TGLTF = GLTF.parse(boxSrc);
 			var gltf:GLTF = GLTF.load(raw);
 
 			it("should load an array of cameras");

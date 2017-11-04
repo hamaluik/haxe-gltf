@@ -1,7 +1,7 @@
-package gltf;
+package gltf.types;
 
 import haxe.ds.Vector;
-import gltf.Schema.TGLTF;
+import gltf.schema.TGLTF;
 
 @:allow(gltf.GLTF)
 class Skin {

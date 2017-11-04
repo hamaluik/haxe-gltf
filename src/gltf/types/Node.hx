@@ -1,7 +1,7 @@
-package gltf;
+package gltf.types;
 
-import gltf.Schema.TGLTF;
-import gltf.Schema.TNode;
+import gltf.schema.TGLTF;
+import gltf.schema.TNode;
 import haxe.ds.Vector;
 
 @:allow(gltf.GLTF)

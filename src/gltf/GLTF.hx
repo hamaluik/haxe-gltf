@@ -1,7 +1,31 @@
 package gltf;
 
-import gltf.Schema;
+import gltf.schema.TTexture;
+import gltf.schema.TSkin;
+import gltf.schema.TScene;
+import gltf.schema.TWrapMode;
+import gltf.schema.TMinFilter;
+import gltf.schema.TMagFilter;
+import gltf.schema.TSampler;
+import gltf.schema.TNode;
+import gltf.schema.TMeshPrimitiveType;
+import gltf.schema.TMeshPrimitive;
+import gltf.schema.TMesh;
+import gltf.schema.TMaterial;
+import gltf.schema.TImage;
+import gltf.schema.TCamera;
+import gltf.schema.TBufferView;
+import gltf.schema.TBuffer;
+import gltf.schema.TAnimationInterpolation;
+import gltf.schema.TAnimation;
+import gltf.schema.TGLTF;
+import gltf.schema.TAccessor;
 import haxe.ds.Vector;
+import gltf.types.Camera;
+import gltf.types.Mesh;
+import gltf.types.Skin;
+import gltf.types.Node;
+import gltf.types.Scene;
 
 /**
  *  An object representing a glTF scene
