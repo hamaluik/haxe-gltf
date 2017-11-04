@@ -17,6 +17,14 @@ class TestParsing extends BuddySuite {
 				raw.asset.version.should.be("2.0");
 
 				raw.scene.should.be(0);
+				raw.scenes.length.should.be(1);
+				raw.scenes[0].nodes.length.should.be(1);
+				raw.scenes[0].nodes[0].should.be(0);
+
+				raw.nodes.length.should.be(2);
+				raw.nodes[0].children.length.should.be(1);
+				raw.nodes[1].children.should.be(null);
+				raw.nodes[1].mesh.should.not.be(null);
 			});
 
 			it("should parse glb files");

@@ -1,7 +1,7 @@
 # adapted from https://github.com/andyli/HaxeCI/blob/master/.travis.yml
 language: haxe
 
-before_script: cd test
+before_script: cd test && sh get-samples.sh
 env:
     matrix:
     - TARGET=interp
