@@ -11,18 +11,18 @@ class Mesh {
 
     function new() {}
 
-    function load(gltf:GLTF, Mesh:TMesh, existingMeshes:Vector<Mesh>):Void {
+    function load(gltf:GLTF, Mesh:TMesh):Void {
         // TODO:
     }
 
     static function loadFromRaw(gltf:GLTF, raw:TGLTF):Vector<Mesh> {
-        var existingMeshes:Vector<Mesh> = new Vector<Mesh>(raw.meshes.length);
+        var meshes:Vector<Mesh> = new Vector<Mesh>(raw.meshes.length);
         for(i in 0...raw.meshes.length) {
-            existingMeshes[i] = new Mesh();
+            meshes[i] = new Mesh();
         }
         for(i in 0...raw.meshes.length) {
-            existingMeshes[i].load(gltf, raw.meshes[i], existingMeshes);
+            meshes[i].load(gltf, raw.meshes[i]);
         }
-        return existingMeshes;
+        return meshes;
     }
 }

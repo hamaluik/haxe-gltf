@@ -10,7 +10,7 @@ class Scene {
 
     function new() {}
 
-    function load(gltf:GLTF, scene:TScene, existingScenes:Vector<Scene>):Void {
+    function load(gltf:GLTF, scene:TScene):Void {
         nodes = new Vector<Node>(scene.nodes.length);
         for(i in 0...scene.nodes.length) {
             nodes[i] = gltf.nodes[scene.nodes[i]];
@@ -18,13 +18,13 @@ class Scene {
     }
 
     static function loadFromRaw(gltf:GLTF, raw:TGLTF):Vector<Scene> {
-        var existingScenes:Vector<Scene> = new Vector<Scene>(raw.scenes.length);
+        var scenes:Vector<Scene> = new Vector<Scene>(raw.scenes.length);
         for(i in 0...raw.scenes.length) {
-            existingScenes[i] = new Scene();
+            scenes[i] = new Scene();
         }
         for(i in 0...raw.scenes.length) {
-            existingScenes[i].load(gltf, raw.scenes[i], existingScenes);
+            scenes[i].load(gltf, raw.scenes[i]);
         }
-        return existingScenes;
+        return scenes;
     }
 }
