@@ -752,7 +752,7 @@ typedef TNode = {
     /**
      *  The index of the camera referenced by this node.
      */
-    @:optional var camera:TCamera;
+    @:optional var camera:TGLTFID;
 
     /**
      *  The indices of this node's children.

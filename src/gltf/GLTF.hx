@@ -7,6 +7,9 @@ import haxe.ds.Vector;
  *  An object representing a glTF scene
  */
 class GLTF {
+    public var cameras(default, null):Vector<Camera> = new Vector<Camera>(0);
+    public var meshes(default, null):Vector<Mesh> = new Vector<Mesh>(0);
+    public var skins(default, null):Vector<Skin> = new Vector<Skin>(0);
     public var nodes(default, null):Vector<Node> = new Vector<Node>(0);
     public var defaultScene(default, null):Scene = null;
     public var scenes(default, null):Vector<Scene> = new Vector<Scene>(0);
@@ -16,6 +19,9 @@ class GLTF {
     public static function load(raw:TGLTF):GLTF {
         var gltf:GLTF = new GLTF();
 
+        gltf.cameras = Camera.loadFromRaw(gltf, raw);
+        gltf.meshes = Mesh.loadFromRaw(gltf, raw);
+        gltf.skins = Skin.loadFromRaw(gltf, raw);
         gltf.nodes = Node.loadFromRaw(gltf, raw);
         gltf.scenes = Scene.loadFromRaw(gltf, raw);
         gltf.defaultScene = gltf.scenes[raw.scene];

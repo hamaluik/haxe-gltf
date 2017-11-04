@@ -6,7 +6,7 @@ import haxe.ds.Vector;
 
 @:allow(gltf.GLTF)
 class Scene {
-    var nodes(default, null):Vector<Node> = new Vector<Node>(0);
+    public var nodes(default, null):Vector<Node> = new Vector<Node>(0);
 
     function new() {}
 

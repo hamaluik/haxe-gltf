@@ -1,0 +1,5 @@
+package gltf;
+
+class MeshPrimitive {
+    
+}
