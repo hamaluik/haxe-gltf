@@ -5,12 +5,9 @@ using buddy.Should;
 
 using gltf.GLTF;
 
-class TestGLTF extends BuddySuite {
+class TestParsing extends BuddySuite {
 	public function new() {
-		describe('Using GLTF', {
-			beforeEach({
-			});
-
+		describe('Parsing GLTF', {
 			it("should parse gltf files");
 			it("should parse glb files");
 		});
