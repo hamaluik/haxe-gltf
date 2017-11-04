@@ -1,0 +1,39 @@
+# adapted from https://github.com/andyli/HaxeCI/blob/master/.travis.yml
+language: haxe
+
+before_script: cd test
+env:
+    matrix:
+    - TARGET=interp
+    - TARGET=cpp
+    - TARGET=node
+    - TARGET=java
+
+# Test with Current Haxe and Haxe development.
+haxe:
+  - stable
+  - development
+
+matrix:
+  # Allow Haxe development to fail.
+  allow_failures:
+    - haxe: development
+
+install:
+  # install haxelibs
+  - haxelib install buddy
+
+  # apt packages for each target
+  - sudo apt-get update
+  - sh -c "if [ '$TARGET' = 'cpp' ]; then sudo apt-get install gcc-multilib g++-multilib -y; fi"
+
+  # haxelib dependencies for each target
+  - sh -c "if [ '$TARGET' = 'cpp' ]; then haxelib install hxcpp; fi"
+  - sh -c "if [ '$TARGET' = 'java' ]; then haxelib install hxjava; fi"
+
+script:
+  - haxe test/test.${TARGET}.hxml
+
+branches:
+      only:
+          - master
