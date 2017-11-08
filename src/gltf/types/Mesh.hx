@@ -11,8 +11,14 @@ class Mesh {
 
     function new() {}
 
-    function load(gltf:GLTF, Mesh:TMesh):Void {
-        // TODO:
+    function load(gltf:GLTF, mesh:TMesh):Void {
+        primitives = new Vector<MeshPrimitive>(mesh.primitives.length);
+        for(i in 0...mesh.primitives.length) {
+            primitives[i] = new MeshPrimitive();
+            primitives[i].load(gltf, mesh.primitives[i]);
+        }
+
+        if(mesh.weights != null) weights = Vector.fromArrayCopy(mesh.weights);
     }
 
     static function loadFromRaw(gltf:GLTF, raw:TGLTF):Vector<Mesh> {

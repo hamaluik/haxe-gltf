@@ -7,6 +7,6 @@ import gltf.schema.TGLTF;
 class Skin {
     // TODO:
     static function loadFromRaw(gltf:GLTF, raw:TGLTF):Vector<Skin> {
-        return null;
+        return new Vector<Skin>(0);
     }
 }

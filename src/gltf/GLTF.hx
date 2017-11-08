@@ -21,16 +21,23 @@ import gltf.schema.TAnimation;
 import gltf.schema.TGLTF;
 import gltf.schema.TAccessor;
 import haxe.ds.Vector;
+import gltf.types.Accessor;
+import gltf.types.Buffer;
+import gltf.types.BufferView;
 import gltf.types.Camera;
 import gltf.types.Mesh;
 import gltf.types.Skin;
 import gltf.types.Node;
 import gltf.types.Scene;
+import haxe.io.Bytes;
 
 /**
  *  An object representing a glTF scene
  */
 class GLTF {
+    public var accessors(default, null):Vector<Accessor> = new Vector<Accessor>(0);
+    public var buffers(default, null):Vector<Buffer> = new Vector<Buffer>(0);
+    public var bufferViews(default, null):Vector<BufferView> = new Vector<BufferView>(0);
     public var cameras(default, null):Vector<Camera> = new Vector<Camera>(0);
     public var meshes(default, null):Vector<Mesh> = new Vector<Mesh>(0);
     public var skins(default, null):Vector<Skin> = new Vector<Skin>(0);
@@ -40,9 +47,12 @@ class GLTF {
 
     function new() {}
 
-    public static function load(raw:TGLTF):GLTF {
+    public static function load(raw:TGLTF, buffers:Vector<Bytes>):GLTF {
         var gltf:GLTF = new GLTF();
 
+        gltf.buffers = Buffer.loadFromRaw(gltf, raw, buffers);
+        gltf.bufferViews = BufferView.loadFromRaw(gltf, raw);
+        gltf.accessors = Accessor.loadFromRaw(gltf, raw);
         gltf.cameras = Camera.loadFromRaw(gltf, raw);
         gltf.meshes = Mesh.loadFromRaw(gltf, raw);
         gltf.skins = Skin.loadFromRaw(gltf, raw);
@@ -55,7 +65,7 @@ class GLTF {
 
     /**
      *  Parse a glTF json string into typedef'd structs
-     *  @param src - The glTF source
+     *  @param src The glTF source
      *  @return TGLTF
      */
     public static function parse(src:String):TGLTF {

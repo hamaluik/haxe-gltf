@@ -22,7 +22,7 @@ typedef TBufferView = {
     /**
      *  The stride, in bytes, between vertex attributes.  When this is not defined, data is tightly packed. When two or more accessors use the same bufferView, this field must be defined.
      */
-    var byteStride:Int;
+    @:optional var byteStride:Int;
 
     /**
      *  The target that the GPU buffer should be bound to.
