@@ -33,7 +33,7 @@ install:
   - sh -c "if [ '$TARGET' = 'node' ]; then haxelib install hxnodejs; fi"
 
 script:
-  - haxe test/test.${TARGET}.hxml
+  - haxe test.${TARGET}.hxml
 
 branches:
       only:
