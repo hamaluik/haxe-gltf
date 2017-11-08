@@ -50,11 +50,16 @@ class TestLoading extends BuddySuite {
                 object.meshes.length.should.be(1);
                 object.meshes[0].primitives.length.should.be(1);
                 object.meshes[0].primitives[0].attributes.length.should.be(2);
-                object.meshes[0].primitives[0].attributes[0].name.should.be("NORMAL");
-                object.meshes[0].primitives[0].attributes[0].accessor.should.be(object.accessors[1]);
-                object.meshes[0].primitives[0].attributes[1].name.should.be("POSITION");
-                object.meshes[0].primitives[0].attributes[1].accessor.should.be(object.accessors[2]);
                 object.meshes[0].primitives[0].indices.should.not.be(null);
+                
+                var foundPosition:Bool = false;
+                var foundNormal:Bool = false;
+                for(a in object.meshes[0].primitives[0].attributes) {
+                    if(a.name == "POSITION") foundPosition = true;
+                    else if(a.name == "NORMAL") foundNormal = true;
+                }
+                foundPosition.should.be(true);
+                foundNormal.should.be(true);
                 
                 trace('indices: ' + object.meshes[0].primitives[0].getIndexValues());
                 trace('positions: ' + object.meshes[0].primitives[0].getFloatAttributeValues("POSITION"));
@@ -65,7 +70,6 @@ class TestLoading extends BuddySuite {
 
 			it("should load an array of nodes", {
 				object.nodes.length.should.be(2);
-				object.nodes[0].children.length.should.not.be(null);
 				object.nodes[0].children.length.should.be(1);
 				object.nodes[0].matrix.should.not.be(null);
 				object.nodes[1].mesh.should.not.be(null);

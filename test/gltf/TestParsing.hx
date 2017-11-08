@@ -23,7 +23,6 @@ class TestParsing extends BuddySuite {
 				raw.nodes.length.should.be(2);
 				raw.nodes[0].children.length.should.be(1);
 				raw.nodes[1].children.should.be(null);
-				raw.nodes[1].mesh.should.not.be(null);
 			});
 
 			it("should parse glb files");
