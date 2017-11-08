@@ -29,6 +29,9 @@ import gltf.types.Mesh;
 import gltf.types.Skin;
 import gltf.types.Node;
 import gltf.types.Scene;
+import gltf.types.Image;
+import gltf.types.Texture;
+import gltf.types.Sampler;
 import haxe.io.Bytes;
 
 /**
@@ -36,11 +39,16 @@ import haxe.io.Bytes;
  */
 class GLTF {
     public var accessors(default, null):Vector<Accessor> = new Vector<Accessor>(0);
+    // TODO: animations
     public var buffers(default, null):Vector<Buffer> = new Vector<Buffer>(0);
     public var bufferViews(default, null):Vector<BufferView> = new Vector<BufferView>(0);
     public var cameras(default, null):Vector<Camera> = new Vector<Camera>(0);
+    public var images(default, null):Vector<Image> = new Vector<Image>(0);
+    //  TODO: materials
     public var meshes(default, null):Vector<Mesh> = new Vector<Mesh>(0);
+    public var samplers(default, null):Vector<Sampler> = new Vector<Sampler>(0);
     public var skins(default, null):Vector<Skin> = new Vector<Skin>(0);
+    public var textures(default, null):Vector<Texture> = new Vector<Texture>(0);
     public var nodes(default, null):Vector<Node> = new Vector<Node>(0);
     public var defaultScene(default, null):Scene = null;
     public var scenes(default, null):Vector<Scene> = new Vector<Scene>(0);
@@ -54,6 +62,9 @@ class GLTF {
         gltf.bufferViews = BufferView.loadFromRaw(gltf, raw);
         gltf.accessors = Accessor.loadFromRaw(gltf, raw);
         gltf.cameras = Camera.loadFromRaw(gltf, raw);
+        gltf.images = Image.loadFromRaw(gltf, raw);
+        gltf.samplers = Sampler.loadFromRaw(gltf, raw);
+        gltf.textures = Texture.loadFromRaw(gltf, raw);
         gltf.meshes = Mesh.loadFromRaw(gltf, raw);
         gltf.skins = Skin.loadFromRaw(gltf, raw);
         gltf.nodes = Node.loadFromRaw(gltf, raw);
