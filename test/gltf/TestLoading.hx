@@ -17,9 +17,7 @@ class TestLoading extends BuddySuite {
 			var boxTexturedSrc:String = sys.io.File.getContent('samples/BoxTextured.gltf');
             var boxTexturedBin:Bytes = sys.io.File.getBytes('samples/BoxTextured0.bin');
 			var boxTexturedRaw:TGLTF = GLTF.parse(boxTexturedSrc);
-            var boxTexturedBuffers:Vector<Bytes> = new Vector<Bytes>(1);
-            boxTexturedBuffers[0] = boxTexturedBin;
-			var boxTexturedObject:GLTF = GLTF.load(boxTexturedRaw, boxTexturedBuffers);
+			var boxTexturedObject:GLTF = GLTF.load(boxTexturedRaw, [boxTexturedBin]);
 
             it("should load an array of buffers", {
                 boxObject.buffers.length.should.be(1);
