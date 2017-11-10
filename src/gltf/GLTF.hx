@@ -55,7 +55,11 @@ class GLTF {
 
     function new() {}
 
-    public static function load(raw:TGLTF, buffers:Vector<Bytes>):GLTF {
+    public inline static function parseAndLoad(src:String, buffers:Array<Bytes>):GLTF {
+        return load(parse(src), buffers);
+    }
+
+    public static function load(raw:TGLTF, buffers:Array<Bytes>):GLTF {
         var gltf:GLTF = new GLTF();
 
         gltf.buffers = Buffer.loadFromRaw(gltf, raw, buffers);
@@ -185,7 +189,6 @@ class GLTF {
             }
             // if the matrix needs filling in..
             else if(node.matrix == null && (node.rotation != null || node.scale != null || node.translation != null)) {
-                trace('filling in matrix');
                 if(node.rotation == null) node.rotation = [ 0.0, 0.0, 0.0, 1.0 ];
                 if(node.scale == null) node.scale = [ 1.0, 1.0, 1.0 ];
                 if(node.translation == null) node.translation = [ 0.0, 0.0, 0.0 ];

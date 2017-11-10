@@ -6,12 +6,14 @@ import haxe.ds.Vector;
 
 @:allow(gltf.GLTF)
 class Mesh {
+    public var name(default, null):Null<String> = null;
     public var primitives(default, null):Vector<MeshPrimitive> = new Vector<MeshPrimitive>(0);
     public var weights(default, null):Vector<Float> = new Vector<Float>(0);
 
     function new() {}
 
     function load(gltf:GLTF, mesh:TMesh):Void {
+        name = mesh.name;
         primitives = new Vector<MeshPrimitive>(mesh.primitives.length);
         for(i in 0...mesh.primitives.length) {
             primitives[i] = new MeshPrimitive();
