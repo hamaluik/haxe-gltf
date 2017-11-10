@@ -55,6 +55,10 @@ class GLTF {
 
     function new() {}
 
+    public inline static function parseAndLoad(src:String, buffers:Array<Bytes>):GLTF {
+        return load(parse(src), buffers);
+    }
+
     public static function load(raw:TGLTF, buffers:Array<Bytes>):GLTF {
         var gltf:GLTF = new GLTF();
 
