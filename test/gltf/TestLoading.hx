@@ -12,9 +12,7 @@ class TestLoading extends BuddySuite {
 			var boxSrc:String = sys.io.File.getContent('samples/Box.gltf');
             var boxBin:Bytes = sys.io.File.getBytes('samples/Box0.bin');
 			var boxRaw:TGLTF = GLTF.parse(boxSrc);
-            var boxBuffers:Vector<Bytes> = new Vector<Bytes>(1);
-            boxBuffers[0] = boxBin;
-			var boxObject:GLTF = GLTF.load(boxRaw, boxBuffers);
+			var boxObject:GLTF = GLTF.load(boxRaw, [boxBin]);
 
 			var boxTexturedSrc:String = sys.io.File.getContent('samples/BoxTextured.gltf');
             var boxTexturedBin:Bytes = sys.io.File.getBytes('samples/BoxTextured0.bin');
