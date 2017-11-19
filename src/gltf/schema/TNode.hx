@@ -5,6 +5,11 @@ package gltf.schema;
  */
 typedef TNode = {
     /**
+     *  The name of the node
+     */
+    @:optional var name:String;
+
+    /**
      *  The index of the camera referenced by this node.
      */
     @:optional var camera:TGLTFID;
