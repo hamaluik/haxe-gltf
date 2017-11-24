@@ -163,10 +163,16 @@ class GLTF {
         for(node in gltf.nodes) {
             // if they all need filling in...
             if(node.matrix == null && node.rotation == null && node.scale == null && node.translation == null) {
-                // ignore the transform for this node!
+                // use the identity matrix
+                node.matrix = [
+                    1, 0, 0, 0,
+                    0, 1, 0, 0,
+                    0, 0, 1, 0,
+                    0, 0, 0, 1
+                ];
             }
             // if the components need filling in...
-            else if(node.matrix != null) {
+            if(node.matrix != null) {
                 var a:Array<Float> = node.matrix;
 
                 node.translation = new Array<Float>();
