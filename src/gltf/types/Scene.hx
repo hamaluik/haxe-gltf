@@ -6,11 +6,13 @@ import haxe.ds.Vector;
 
 @:allow(gltf.GLTF)
 class Scene {
+    public var name(default, null):Null<String> = null;
     public var nodes(default, null):Vector<Node> = new Vector<Node>(0);
 
     function new() {}
 
     function load(gltf:GLTF, scene:TScene):Void {
+        name = scene.name;
         nodes = new Vector<Node>(scene.nodes.length);
         for(i in 0...scene.nodes.length) {
             nodes[i] = gltf.nodes[scene.nodes[i]];
