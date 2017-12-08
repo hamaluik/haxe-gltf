@@ -70,8 +70,8 @@ class GLTF {
         gltf.samplers = Sampler.loadFromRaw(gltf, raw);
         gltf.textures = Texture.loadFromRaw(gltf, raw);
         gltf.meshes = Mesh.loadFromRaw(gltf, raw);
-        gltf.skins = Skin.loadFromRaw(gltf, raw);
         gltf.nodes = Node.loadFromRaw(gltf, raw);
+        gltf.skins = Skin.loadFromRaw(gltf, raw);
         gltf.scenes = Scene.loadFromRaw(gltf, raw);
         gltf.defaultScene = gltf.scenes[raw.scene];
 

@@ -19,6 +19,11 @@ class TestLoading extends BuddySuite {
 			var boxTexturedRaw:TGLTF = GLTF.parse(boxTexturedSrc);
 			var boxTexturedObject:GLTF = GLTF.load(boxTexturedRaw, [boxTexturedBin]);
 
+			var riggedSimpleSrc:String = sys.io.File.getContent('samples/RiggedSimple.gltf');
+            var riggedSimpleBin:Bytes = sys.io.File.getBytes('samples/RiggedSimple0.bin');
+			var riggedSimpleRaw:TGLTF = GLTF.parse(riggedSimpleSrc);
+			var riggedSimpleObject:GLTF = GLTF.load(riggedSimpleRaw, [riggedSimpleBin]);
+
             it("should load an array of buffers", {
                 boxObject.buffers.length.should.be(1);
                 boxObject.buffers[0].uri.should.be("Box0.bin");
@@ -64,12 +69,17 @@ class TestLoading extends BuddySuite {
                 foundPosition.should.be(true);
                 foundNormal.should.be(true);
                 
-                trace('indices: ' + boxObject.meshes[0].primitives[0].getIndexValues());
-                trace('positions: ' + boxObject.meshes[0].primitives[0].getFloatAttributeValues("POSITION"));
-                trace('normals: ' + boxObject.meshes[0].primitives[0].getFloatAttributeValues("NORMAL"));
+                //trace('indices: ' + boxObject.meshes[0].primitives[0].getIndexValues());
+                //trace('positions: ' + boxObject.meshes[0].primitives[0].getFloatAttributeValues("POSITION"));
+                //trace('normals: ' + boxObject.meshes[0].primitives[0].getFloatAttributeValues("NORMAL"));
             });
 
-			it("should load an array of skins");
+			it("should load an array of skins", {
+                riggedSimpleObject.skins.length.should.be(1);
+                riggedSimpleObject.skins[0].skeleton.should.not.be(null);
+                riggedSimpleObject.skins[0].joints.length.should.be(2);
+                riggedSimpleObject.skins[0].inverseBindMatrices.length.should.be(2);
+            });
 
 			it("should load an array of nodes", {
 				boxObject.nodes.length.should.be(2);
