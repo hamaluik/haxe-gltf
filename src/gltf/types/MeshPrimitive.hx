@@ -50,6 +50,21 @@ class MeshPrimitive {
         return accessor.getFloats();
     }
 
+    public function getIntAttributeValues(attribute:String):Vector<Int> {
+        var accessor:Accessor = null;
+        for(a in attributes) {
+            if(a.name == attribute) {
+                accessor = a.accessor;
+                break;
+            }
+        }
+        if(accessor == null) {
+            throw 'This mesh primitive doesn\'t contain the \'${attribute}\' attribute!';
+        }
+
+        return accessor.getInts();
+    }
+
     public function getIndexValues():Vector<Int> {
         if(indices == null) {
             throw 'This mesh primitive doesn\'t have indices!';
