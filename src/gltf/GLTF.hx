@@ -63,17 +63,18 @@ class GLTF {
     public static function load(raw:TGLTF, buffers:Array<Bytes>):GLTF {
         var gltf:GLTF = new GLTF();
 
+        gltf.nodes = Node.preloadFromRaw(gltf, raw);
         gltf.buffers = Buffer.loadFromRaw(gltf, raw, buffers);
         gltf.bufferViews = BufferView.loadFromRaw(gltf, raw);
         gltf.accessors = Accessor.loadFromRaw(gltf, raw);
+        gltf.animations = Animation.loadFromRaw(gltf, raw);
         gltf.cameras = Camera.loadFromRaw(gltf, raw);
         gltf.images = Image.loadFromRaw(gltf, raw);
         gltf.samplers = Sampler.loadFromRaw(gltf, raw);
         gltf.textures = Texture.loadFromRaw(gltf, raw);
         gltf.meshes = Mesh.loadFromRaw(gltf, raw);
-        gltf.nodes = Node.loadFromRaw(gltf, raw);
         gltf.skins = Skin.loadFromRaw(gltf, raw);
-        gltf.animations = Animation.loadFromRaw(gltf, raw);
+        gltf.nodes = Node.loadFromRaw(gltf, raw);
         gltf.scenes = Scene.loadFromRaw(gltf, raw);
         gltf.defaultScene = gltf.scenes[raw.scene];
 

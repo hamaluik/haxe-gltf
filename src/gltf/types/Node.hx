@@ -38,15 +38,19 @@ class Node {
         if(node.weights != null) weights = Vector.fromArrayCopy(node.weights);
     }
 
-    static function loadFromRaw(gltf:GLTF, raw:TGLTF):Vector<Node> {
+    static function preloadFromRaw(gltf:GLTF, raw:TGLTF):Vector<Node> {
         var existingNodes:Vector<Node> = new Vector<Node>(raw.nodes.length);
         for(i in 0...raw.nodes.length) {
             existingNodes[i] = new Node();
             existingNodes[i].id = i;
         }
-        for(i in 0...raw.nodes.length) {
-            existingNodes[i].load(gltf, raw.nodes[i], existingNodes);
-        }
         return existingNodes;
+    }
+
+    static function loadFromRaw(gltf:GLTF, raw:TGLTF):Vector<Node> {
+        for(i in 0...raw.nodes.length) {
+            gltf.nodes[i].load(gltf, raw.nodes[i], gltf.nodes);
+        }
+        return gltf.nodes;
     }
 }
