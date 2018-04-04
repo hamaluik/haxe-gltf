@@ -6,6 +6,7 @@ import haxe.ds.Vector;
 
 @:allow(gltf.GLTF)
 class Node {
+    public var id(default, null):Int = -1;
     public var name(default, null):Null<String> = null;
     public var camera(default, null):Null<Camera> = null;
     public var children(default, null):Vector<Node> = new Vector<Node>(0);
@@ -41,6 +42,7 @@ class Node {
         var existingNodes:Vector<Node> = new Vector<Node>(raw.nodes.length);
         for(i in 0...raw.nodes.length) {
             existingNodes[i] = new Node();
+            existingNodes[i].id = i;
         }
         for(i in 0...raw.nodes.length) {
             existingNodes[i].load(gltf, raw.nodes[i], existingNodes);

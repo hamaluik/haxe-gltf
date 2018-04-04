@@ -22,6 +22,7 @@ import gltf.schema.TGLTF;
 import gltf.schema.TAccessor;
 import haxe.ds.Vector;
 import gltf.types.Accessor;
+import gltf.types.Animation;
 import gltf.types.Buffer;
 import gltf.types.BufferView;
 import gltf.types.Camera;
@@ -39,7 +40,7 @@ import haxe.io.Bytes;
  */
 class GLTF {
     public var accessors(default, null):Vector<Accessor> = new Vector<Accessor>(0);
-    // TODO: animations
+    public var animations(default, null):Vector<Animation> = new Vector<Animation>(0);
     public var buffers(default, null):Vector<Buffer> = new Vector<Buffer>(0);
     public var bufferViews(default, null):Vector<BufferView> = new Vector<BufferView>(0);
     public var cameras(default, null):Vector<Camera> = new Vector<Camera>(0);
@@ -72,6 +73,7 @@ class GLTF {
         gltf.meshes = Mesh.loadFromRaw(gltf, raw);
         gltf.nodes = Node.loadFromRaw(gltf, raw);
         gltf.skins = Skin.loadFromRaw(gltf, raw);
+        gltf.animations = Animation.loadFromRaw(gltf, raw);
         gltf.scenes = Scene.loadFromRaw(gltf, raw);
         gltf.defaultScene = gltf.scenes[raw.scene];
 
