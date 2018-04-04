@@ -6,7 +6,7 @@ import gltf.schema.TAnimationSampler;
 
 @:allow(gltf.types.AnimationChannel)
 class AnimationSample {
-    public var input(default, null):Float = null;
+    public var input(default, null):Float = 0;
     public var output(default, null):Vector<Float> = null;
 
     private function new(input:Float, output:Vector<Float>) {

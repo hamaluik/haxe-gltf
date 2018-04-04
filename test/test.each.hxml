@@ -1,4 +1,5 @@
 -lib buddy
 -cp ../src
 -D testing
+-debug
 -main TestMain

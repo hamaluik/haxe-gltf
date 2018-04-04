@@ -1,4 +1,4 @@
 test.each.hxml
 -cpp bin
--cmd bin/TestMain
+-cmd bin\\TestMain.exe
 -D HXCPP_M64
