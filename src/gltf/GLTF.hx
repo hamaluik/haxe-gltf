@@ -60,11 +60,21 @@ class GLTF {
         return load(parse(src), buffers);
     }
 
+    public inline static function parseAndLoadWithBuffer(src: String, bufferGetter: Int->Bytes): GLTF {
+        return loadWithBufferGetter(parse(src), bufferGetter);
+    }
+
     public static function load(raw:TGLTF, buffers:Array<Bytes>):GLTF {
+        return loadWithBufferGetter(raw, function(index: Int): Bytes {
+            return buffers[index];
+        });
+    }
+
+    public static function loadWithBufferGetter(raw: TGLTF, bufferGetter: Int->Bytes): GLTF {
         var gltf:GLTF = new GLTF();
 
         gltf.nodes = Node.preloadFromRaw(gltf, raw);
-        gltf.buffers = Buffer.loadFromRaw(gltf, raw, buffers);
+        gltf.buffers = Buffer.loadFromRawWithGetter(gltf, raw, bufferGetter);
         gltf.bufferViews = BufferView.loadFromRaw(gltf, raw);
         gltf.accessors = Accessor.loadFromRaw(gltf, raw);
         gltf.animations = Animation.loadFromRaw(gltf, raw);

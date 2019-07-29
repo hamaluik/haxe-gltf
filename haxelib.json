@@ -5,8 +5,8 @@
   "license": "Apache",
   "tags": ["cross", "utility"],
   "description": "A Haxe library for reading glTF 2.0 files",
-  "version": "2.0.0",
-  "releasenote": "Updating to glTF 2.0",
+  "version": "2.1.0",
+  "releasenote": "Added parsing .glb files, added buffer retrieval callback",
   "contributors": ["FuzzyWuzzie"],
   "dependencies": {}
 }
