@@ -56,6 +56,37 @@ class GLTF {
 
     function new() {}
 
+    public static function parseAndLoadGLB(data: Bytes): GLTF {
+        if(data.sub(0, 4).compare(Bytes.ofString('glTF')) != 0) {
+            throw 'invalid magic: ${data.sub(0, 4).toHex()}';
+        }
+        if(data.sub(4, 4).getInt32(0) != 2) {
+            throw 'invalid gltf version: ${data.sub(4, 4).getInt32(0)}';
+        }
+
+        var jsonChunkLength: Int = data.sub(12, 4).getInt32(0);
+        if(jsonChunkLength < 1) {
+            throw 'invalid json chunk length: ${jsonChunkLength}';
+        }
+        var jsonChunkType: String = data.sub(16, 4).toString();
+        if(jsonChunkType != 'JSON') {
+            throw 'invalid json chunk type: ${jsonChunkType}';
+        }
+
+        var jsonChunk: String = data.sub(20, jsonChunkLength).toString();
+        var raw: TGLTF = parse(jsonChunk);
+
+        var binaryChunkLength: Int = data.sub(20 + jsonChunkLength, 4).getInt32(0);
+        if(binaryChunkLength < 1) {
+            throw 'invalid binary chunk length: ${binaryChunkLength}';
+        }
+        if(data.sub(24 + jsonChunkLength, 4).compare(Bytes.ofHex('42494E00')) != 0) {
+            throw 'invalid binary chunk type: ${data.sub(24 + jsonChunkLength, 4).toHex()}';
+        }
+
+        return load(raw, [data.sub(28 + jsonChunkLength, binaryChunkLength)]);
+    }
+
     public inline static function parseAndLoad(src:String, buffers:Array<Bytes>):GLTF {
         return load(parse(src), buffers);
     }

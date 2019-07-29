@@ -8,6 +8,32 @@ import haxe.ds.Vector;
 
 class TestLoading extends BuddySuite {
     public function new() {
+        describe('Loading GLBs', {
+            var boxData = sys.io.File.getBytes('samples/Box.glb');
+
+            it('should load a GLB without throwing an exception', {
+                var box = GLTF.parseAndLoadGLB(boxData);
+            });
+
+            it('should load a GLB mesh', {
+                var box = GLTF.parseAndLoadGLB(boxData);
+
+                box.meshes.length.should.be(1);
+                box.meshes[0].primitives.length.should.be(1);
+                box.meshes[0].primitives[0].attributes.length.should.be(2);
+                box.meshes[0].primitives[0].indices.should.not.be(null);
+                
+                var foundPosition:Bool = false;
+                var foundNormal:Bool = false;
+                for(a in box.meshes[0].primitives[0].attributes) {
+                    if(a.name == "POSITION") foundPosition = true;
+                    else if(a.name == "NORMAL") foundNormal = true;
+                }
+                foundPosition.should.be(true);
+                foundNormal.should.be(true);
+            });
+        });
+
         describe('Loading GLTFs', {
             var boxSrc:String = sys.io.File.getContent('samples/Box.gltf');
             var boxBin:Bytes = sys.io.File.getBytes('samples/Box0.bin');
