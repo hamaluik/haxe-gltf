@@ -1,6 +1,7 @@
 package gltf.types;
 
 import gltf.GLTF;
+import gltf.schema.TGLTFID;
 import gltf.types.Accessor;
 import gltf.schema.TMeshPrimitive;
 import haxe.ds.Vector;
@@ -14,7 +15,7 @@ typedef TAttribute = {
 class MeshPrimitive {
     public var attributes(default, null):Vector<TAttribute> = new Vector<TAttribute>(0);
     public var indices(default, null):Null<Accessor> = null;
-    // TODO: material
+    public var material(default, null):Null<TGLTFID> = null;
     // TODO: mode
     // TODO: morph targets
 
@@ -33,6 +34,7 @@ class MeshPrimitive {
         }
 
         if(primitive.indices != null) indices = gltf.accessors[primitive.indices];
+        if(primitive.material != null) material = primitive.material;
     }
 
     public function getFloatAttributeValues(attribute:String):Vector<Float> {

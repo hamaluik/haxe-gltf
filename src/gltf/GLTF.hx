@@ -27,6 +27,7 @@ import gltf.types.Buffer;
 import gltf.types.BufferView;
 import gltf.types.Camera;
 import gltf.types.Mesh;
+import gltf.types.Material;
 import gltf.types.Skin;
 import gltf.types.Node;
 import gltf.types.Scene;
@@ -45,7 +46,7 @@ class GLTF {
     public var bufferViews(default, null):Vector<BufferView> = new Vector<BufferView>(0);
     public var cameras(default, null):Vector<Camera> = new Vector<Camera>(0);
     public var images(default, null):Vector<Image> = new Vector<Image>(0);
-    //  TODO: materials
+    public var material(default, null):Vector<Material> = new Vector<Material>(0);
     public var meshes(default, null):Vector<Mesh> = new Vector<Mesh>(0);
     public var samplers(default, null):Vector<Sampler> = new Vector<Sampler>(0);
     public var skins(default, null):Vector<Skin> = new Vector<Skin>(0);
@@ -114,6 +115,7 @@ class GLTF {
         gltf.samplers = Sampler.loadFromRaw(gltf, raw);
         gltf.textures = Texture.loadFromRaw(gltf, raw);
         gltf.meshes = Mesh.loadFromRaw(gltf, raw);
+        gltf.material = Material.loadFromRaw(gltf, raw);
         gltf.skins = Skin.loadFromRaw(gltf, raw);
         gltf.nodes = Node.loadFromRaw(gltf, raw);
         gltf.scenes = Scene.loadFromRaw(gltf, raw);
