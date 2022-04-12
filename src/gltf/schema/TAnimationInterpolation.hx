@@ -3,7 +3,7 @@ package gltf.schema;
 /**
  *  Interpolation algorithm.
  */
-@:enum abstract TAnimationInterpolation(String) {
+@:enum abstract TAnimationInterpolation(String) from String to String {
     /**
      *  The animated values are linearly interpolated between keyframes. When targeting a rotation, spherical linear interpolation (slerp) should be used to interpolate quaternions. The number output of elements must equal the number of input elements.
      */

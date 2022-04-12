@@ -3,7 +3,7 @@ package gltf.schema;
 /**
  *  The type of primitives to render. All valid values correspond to WebGL enums.
  */
-@:enum abstract TMeshPrimitiveType(Int) {
+@:enum abstract TMeshPrimitiveType(Int) from Int to Int {
     var POINTS = 0;
     var LINES = 1;
     var LINE_LOOP = 2;
