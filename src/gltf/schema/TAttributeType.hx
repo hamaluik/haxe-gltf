@@ -1,6 +1,6 @@
 package gltf.schema;
 
-@:enum abstract TAttributeType(String) {
+@:enum abstract TAttributeType(String) from String to String {
     var SCALAR = "SCALAR";
     var VEC2 = "VEC2";
     var VEC3 = "VEC3";
