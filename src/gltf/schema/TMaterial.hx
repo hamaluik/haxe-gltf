@@ -5,6 +5,7 @@ package gltf.schema;
  */
 typedef TMaterial = {
     >TGLTFChildOfRootProperty,
+    >TGLTFProperty,
 
     /**
      *  A set of parameter values that are used to define the metallic-roughness material model from Physically-Based Rendering (PBR) methodology. When not specified, all the default values of `pbrMetallicRoughness` apply.

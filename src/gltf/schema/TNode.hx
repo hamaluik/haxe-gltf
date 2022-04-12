@@ -5,6 +5,7 @@ package gltf.schema;
  */
 typedef TNode = {
     >TGLTFChildOfRootProperty,
+    >TGLTFProperty,
 
     /**
      *  The index of the camera referenced by this node.

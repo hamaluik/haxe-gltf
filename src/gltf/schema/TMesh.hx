@@ -5,6 +5,7 @@ package gltf.schema;
  */
 typedef TMesh = {
     >TGLTFChildOfRootProperty,
+    >TGLTFProperty,
 
     /**
      *  An array of primitives, each defining geometry to be rendered with a material.

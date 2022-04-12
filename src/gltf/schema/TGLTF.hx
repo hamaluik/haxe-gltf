@@ -4,6 +4,8 @@ package gltf.schema;
  *  The root object for a glTF asset.
  */
 typedef TGLTF = {
+    >TGLTFProperty,
+
     /**
      *  Names of glTF extensions used somewhere in this asset
      */

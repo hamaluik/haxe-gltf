@@ -5,11 +5,8 @@ package gltf.schema;
  */
 typedef TImage = {
     >TGLTFChildOfRootProperty,
-
-    /**
-     *  The uri of the image.  Relative paths are relative to the .gltf file.  Instead of referencing an external file, the uri can also be a data-uri.  The image format must be jpg or png.
-     */
-    @:optional var uri:String;
+    >TGLTFProperty,
+    >TGLTFUri,
 
     /**
      *  The image's MIME type.

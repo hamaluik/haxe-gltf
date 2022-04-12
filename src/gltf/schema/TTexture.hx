@@ -7,6 +7,7 @@ package gltf.schema;
  */
 typedef TTexture = {
     >TGLTFChildOfRootProperty,
+    >TGLTFProperty,
 
     /**
      *  The index of the sampler used by this texture. When undefined, a sampler with repeat wrapping and auto filtering should be used.
