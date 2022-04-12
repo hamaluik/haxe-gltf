@@ -5,6 +5,7 @@ package gltf.schema;
  */
 typedef TScene = {
     >TGLTFChildOfRootProperty,
+    >TGLTFProperty,
 
     /**
      *  The indices of each root node.

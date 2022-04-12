@@ -5,6 +5,7 @@ package gltf.schema;
  */
 typedef TCamera = {
     >TGLTFChildOfRootProperty,
+    >TGLTFProperty,
 
     /**
      *  An orthographic camera containing properties to create an orthographic projection matrix.
