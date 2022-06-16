@@ -4,6 +4,8 @@ package gltf.schema;
  *  Geometry to be rendered with the given material.
  */
 typedef TMeshPrimitive = {
+    >TGLTFProperty,
+
     /**
      *  A dictionary object, where each key corresponds to mesh attribute semantic and each value is the index of the accessor containing attribute's data.
      */

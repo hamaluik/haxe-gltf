@@ -5,6 +5,7 @@ package gltf.schema;
  */
 typedef TSampler = {
     >TGLTFChildOfRootProperty,
+    >TGLTFProperty,
 
     /**
      *  Magnification filter.  Valid values correspond to WebGL enums: `9728` (NEAREST) and `9729` (LINEAR).

@@ -3,7 +3,7 @@ package gltf.schema;
 /**
  *  The material's alpha rendering mode enumeration specifying the interpretation of the alpha value of the main factor and texture.
  */
-@:enum abstract TAlphaMode(String) {
+@:enum abstract TAlphaMode(String) from String to String {
     /**
      *  The alpha value is ignored and the rendered output is fully opaque.
      */

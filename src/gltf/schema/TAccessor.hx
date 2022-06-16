@@ -5,6 +5,7 @@ package gltf.schema;
  */
 typedef TAccessor = {
     >TGLTFChildOfRootProperty,
+    >TGLTFProperty,
 
     /**
      *  The index of the bufferView. When not defined, accessor must be initialized with zeros; `sparse` property or extensions could override zeros with actual values.

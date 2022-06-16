@@ -4,6 +4,8 @@ package gltf.schema;
  *  A view into a buffer generally representing a subset of the buffer.
  */
 typedef TBufferView = {
+    >TGLTFProperty,
+
     /**
      *  The index of the buffer.
      */
