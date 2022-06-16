@@ -13,7 +13,7 @@ class Accessor {
     public var count(default, null):Int = 0;
     public var componentType(default, null):TComponentType = TComponentType.BYTE;
     public var type(default, null):TAttributeType = TAttributeType.SCALAR;
-    // TODO: normalized
+    public var normalized(default, null):Bool = false;
     // TODO: min / max
     // TODO: sparse accessors
 
@@ -25,6 +25,7 @@ class Accessor {
         count = accessor.count;
         componentType = accessor.componentType;
         type = accessor.type;
+        normalized = accessor.normalized == null ? false: accessor.normalized;
     }
 
     static function loadFromRaw(gltf:GLTF, raw:TGLTF):Vector<Accessor> {
